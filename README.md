@@ -38,7 +38,7 @@ C++, STL, Python, NumPy, Pandas, Scikit-learn, MySQL, React.js, Node.js, Express
 
 ## Project Status
 
-🚧 Currently under development as part of the PBL Phase-I project.
+🚧 Currently working on it for PBL Phase-II project.
 
 ## Future Scope
 
