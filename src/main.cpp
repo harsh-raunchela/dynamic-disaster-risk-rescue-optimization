@@ -1,133 +1,66 @@
 #include <iostream>
-#include "LocationHashMap.h"
-#include "PathStack.h"
+#include "MinHeap.h"
 
 using namespace std;
 
 int main()
 {
-    PathStack pathStack;
+    MinHeap resourceHeap;
 
+    RescueResource r1;
+    r1.id = "RES_001";
+    r1.type = "Ambulance";
+    r1.locationId = "LOC_0010";
+    r1.priority = 25;
 
-    // ==========================================
-    // PUSH LOCATIONS
-    // ==========================================
+    RescueResource r2;
+    r2.id = "RES_002";
+    r2.type = "Rescue Team";
+    r2.locationId = "LOC_0025";
+    r2.priority = 10;
 
-    cout << "Building path...\n";
+    RescueResource r3;
+    r3.id = "RES_003";
+    r3.type = "Helicopter";
+    r3.locationId = "LOC_0040";
+    r3.priority = 40;
 
-    pathStack.push("LOC_0001");
-    pathStack.push("LOC_0042");
-    pathStack.push("LOC_0105");
-    pathStack.push("LOC_0231");
+    RescueResource r4;
+    r4.id = "RES_004";
+    r4.type = "Ambulance";
+    r4.locationId = "LOC_0015";
+    r4.priority = 15;
 
+    cout << "Adding rescue resources...\n";
 
-    // ==========================================
-    // DISPLAY STACK
-    // ==========================================
+    resourceHeap.insert(r1);
+    resourceHeap.insert(r2);
+    resourceHeap.insert(r3);
+    resourceHeap.insert(r4);
 
-    cout << "\nStack after pushing locations:";
+    resourceHeap.display();
 
-    pathStack.display();
+    cout << "\nBest resource to dispatch:\n";
 
+    RescueResource best = resourceHeap.peek();
 
-    // ==========================================
-    // PEEK
-    // ==========================================
-
-    cout << "\nTop location:\n";
-
-    cout << pathStack.peek() << endl;
-
-
-    // ==========================================
-    // POP
-    // ==========================================
-
-    cout << "\nRemoving top location:\n";
-
-    cout << "Removed: "
-         << pathStack.pop()
+    cout << "ID: " << best.id
+         << " | Type: " << best.type
+         << " | Priority: " << best.priority
          << endl;
 
+    cout << "\nExtracting resources in priority order:\n";
 
-    // ==========================================
-    // DISPLAY AGAIN
-    // ==========================================
-
-    cout << "\nRemaining path:";
-
-    pathStack.display();
-
-    LocationHashMap locationMap;
-
-    Location loc1;
-    loc1.id = "LOC_0001";
-    loc1.name = "Village A";
-    loc1.type = "Village";
-    loc1.latitude = 30.3165;
-    loc1.longitude = 78.0322;
-    loc1.capacity = 100;
-
-    Location loc2;
-    loc2.id = "LOC_0042";
-    loc2.name = "Hospital A";
-    loc2.type = "Hospital";
-    loc2.latitude = 30.3200;
-    loc2.longitude = 78.0400;
-    loc2.capacity = 200;
-
-    Location loc3;
-    loc3.id = "LOC_0105";
-    loc3.name = "Shelter A";
-    loc3.type = "Shelter";
-    loc3.latitude = 30.3250;
-    loc3.longitude = 78.0450;
-    loc3.capacity = 500;
-
-    cout << "\nAdding locations...\n";
-
-    locationMap.insert(loc1);
-    locationMap.insert(loc2);
-    locationMap.insert(loc3);
-
-    Location* result = locationMap.search("LOC_0042");
-
-    cout << "\nSearching for LOC_0042:\n";
-
-    if (result != nullptr)
+    while (!resourceHeap.isEmpty())
     {
-        cout << "Found: "
-             << result->id << " | "
-             << result->name << " | "
-             << result->type << endl;
-    }
-    else
-    {
-        cout << "Location not found.\n";
+        RescueResource resource = resourceHeap.extractMin();
+
+        cout << "Dispatched: "
+             << resource.id
+             << " | Priority: "
+             << resource.priority
+             << endl;
     }
 
-    cout << "\nChecking LOC_0105:\n";
-
-    if (locationMap.contains("LOC_0105"))
-    {
-        cout << "Location exists.\n";
-    }
-    else
-    {
-        cout << "Location does not exist.\n";
-    }
-
-    cout << "\nRemoving LOC_0042...\n";
-
-    locationMap.remove("LOC_0042");
-
-    cout << "\nSearching again for LOC_0042:\n";
-
-    if (locationMap.search("LOC_0042") == nullptr)
-    {
-        cout << "Location not found.\n";
-    }
-
-    locationMap.display();
     return 0;
 }
