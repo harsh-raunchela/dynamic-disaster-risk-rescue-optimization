@@ -1,17 +1,22 @@
 #ifndef EDGE_H
 #define EDGE_H
 
+#include <string>
+
+using namespace std;
+
 struct Edge
 {
-    int destination;
+    string destination;
 
     double distance;
     double travelTime;
-    double risk;
-    double traffic;
-    double roadCondition;
 
-    bool blocked;
+    string risk;
+    string traffic;
+    string roadCondition;
+
+    string status;
 };
 
 #endif

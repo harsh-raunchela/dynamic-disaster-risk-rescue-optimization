@@ -3,6 +3,8 @@
 
 #include <unordered_map>
 #include <vector>
+#include <string>
+
 #include "Location.h"
 #include "Edge.h"
 
@@ -12,29 +14,48 @@ class Graph
 {
 private:
 
-    // Stores location ID -> Location
-    unordered_map<int, Location> locations;
+    // Stores:
+    // Location ID -> Location object
+    unordered_map<string, Location> locations;
 
-    // Adjacency list
-    // location ID -> list of outgoing roads
-    unordered_map<int, vector<Edge>> adjacencyList;
+    // Adjacency list:
+    // Location ID -> list of outgoing roads
+    unordered_map<string, vector<Edge>> adjacencyList;
 
 public:
 
+    // Add a location to the graph
     void addLocation(const Location& location);
 
-    void addRoad(int source, const Edge& edge);
+    // Add a road from source to destination
+    void addRoad(const string& source, const Edge& edge);
 
-    void removeRoad(int source, int destination);
+    // Remove a road
+    void removeRoad(const string& source, const string& destination);
 
-    void updateRoad(int source, int destination, const Edge& updatedEdge);
+    // Update a road
+    void updateRoad(
+        const string& source,
+        const string& destination,
+        const Edge& updatedEdge
+    );
 
-    void blockRoad(int source, int destination);
+    // Close a road
+    void blockRoad(
+        const string& source,
+        const string& destination
+    );
 
-    void unblockRoad(int source, int destination);
+    // Open a road
+    void unblockRoad(
+        const string& source,
+        const string& destination
+    );
 
-    vector<Edge> getNeighbors(int locationId);
+    // Get all roads going out from a location
+    vector<Edge> getNeighbors(const string& locationId);
 
+    // Display graph
     void displayGraph();
 };
 

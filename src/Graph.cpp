@@ -4,7 +4,15 @@
 using namespace std;
 
 
-//add locatoin to the graph , like 101 -> VillageA 
+// --------------------------------------------------
+// ADD LOCATION
+// --------------------------------------------------
+// Adds a location to the graph.
+//
+// Example:
+// LOC_0001 -> Village A
+// --------------------------------------------------
+
 void Graph::addLocation(const Location& location)
 {
     locations[location.id] = location;
@@ -15,28 +23,50 @@ void Graph::addLocation(const Location& location)
 }
 
 
+// --------------------------------------------------
+// ADD ROAD
+// --------------------------------------------------
+// Adds a road to the adjacency list.
+//
+// Example:
+// LOC_0001 -> LOC_0002
+// --------------------------------------------------
 
-//add road to the graph, like 101 -> 102
-void Graph::addRoad(int source, const Edge& edge)
+void Graph::addRoad(const string& source, const Edge& edge)
 {
     adjacencyList[source].push_back(edge);
 }
 
 
+// --------------------------------------------------
+// GET NEIGHBORS
+// --------------------------------------------------
+// Returns all outgoing roads from a location.
+//
+// Example:
+//
+// LOC_0001
+//    |
+//    |---- LOC_0002
+//    |
+//    |---- LOC_0003
+// --------------------------------------------------
 
-//getNeighnors returns the list of outgoing roads from a given location ID. It retrieves the adjacency list for the specified location ID and returns it as a vector of Edge objects. If the location ID does not exist in the adjacency list, it will return an empty vector.
-vector<Edge> Graph::getNeighbors(int locationId)
+vector<Edge> Graph::getNeighbors(const string& locationId)
 {
     return adjacencyList[locationId];
 }
 
 
-//displayGraph prints the graph's structure, including locations and their outgoing roads. It iterates through the adjacency list and displays each location's ID, name, and the details of its outgoing roads, such as destination, distance, travel time, risk, traffic, road condition, and blocked status.
+// --------------------------------------------------
+// DISPLAY GRAPH
+// --------------------------------------------------
+
 void Graph::displayGraph()
 {
     for (auto& pair : adjacencyList)
     {
-        int source = pair.first;
+        string source = pair.first;
 
         cout << source << " -> ";
 
@@ -44,10 +74,20 @@ void Graph::displayGraph()
         {
             cout << edge.destination;
 
-            if (edge.blocked)
-                cout << "(BLOCKED)";
+            cout << " [Distance: "
+                 << edge.distance
+                 << ", Time: "
+                 << edge.travelTime
+                 << ", Risk: "
+                 << edge.risk
+                 << ", Traffic: "
+                 << edge.traffic
+                 << ", Road: "
+                 << edge.roadCondition
+                 << ", Status: "
+                 << edge.status
+                 << "] ";
 
-            cout << " ";
         }
 
         cout << endl;
@@ -55,35 +95,67 @@ void Graph::displayGraph()
 }
 
 
-//Road bloking and unblocking functions are not implemented in the provided code snippet. However, based on the class definition in Graph.h, you would typically implement these functions to modify the 'blocked' status of a road (Edge) between two locations.
-void Graph::blockRoad(int source, int destination)
+// --------------------------------------------------
+// BLOCK ROAD
+// --------------------------------------------------
+// Changes road status to Closed.
+//
+// Example:
+// LOC_0001 -> LOC_0002
+// status = Open
+//
+// becomes:
+//
+// LOC_0001 -> LOC_0002
+// status = Closed
+// --------------------------------------------------
+
+void Graph::blockRoad(
+    const string& source,
+    const string& destination
+)
 {
     for (Edge& edge : adjacencyList[source])
     {
         if (edge.destination == destination)
         {
-            edge.blocked = true;
+            edge.status = "Closed";
             return;
         }
     }
 }
 
-void Graph::unblockRoad(int source, int destination)
+
+// --------------------------------------------------
+// UNBLOCK ROAD
+// --------------------------------------------------
+// Changes road status to Open.
+// --------------------------------------------------
+
+void Graph::unblockRoad(
+    const string& source,
+    const string& destination
+)
 {
     for (Edge& edge : adjacencyList[source])
     {
         if (edge.destination == destination)
         {
-            edge.blocked = false;
+            edge.status = "Open";
             return;
         }
     }
 }
 
 
+// --------------------------------------------------
+// REMOVE ROAD
+// --------------------------------------------------
 
-//remove road from the graph, like 101 -> 102
-void Graph::removeRoad(int source, int destination)
+void Graph::removeRoad(
+    const string& source,
+    const string& destination
+)
 {
     vector<Edge>& edges = adjacencyList[source];
 
@@ -98,12 +170,15 @@ void Graph::removeRoad(int source, int destination)
 }
 
 
+// --------------------------------------------------
+// UPDATE ROAD
+// --------------------------------------------------
 
-//update road in the graph, like 101 -> 102
 void Graph::updateRoad(
-    int source,
-    int destination,
-    const Edge& updatedEdge)
+    const string& source,
+    const string& destination,
+    const Edge& updatedEdge
+)
 {
     for (Edge& edge : adjacencyList[source])
     {
