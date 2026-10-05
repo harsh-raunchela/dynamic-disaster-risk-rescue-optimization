@@ -1,66 +1,63 @@
 #include <iostream>
-#include "MinHeap.h"
+#include "LocationSet.h"
 
 using namespace std;
 
 int main()
 {
-    MinHeap resourceHeap;
+    LocationSet visitedLocations;
 
-    RescueResource r1;
-    r1.id = "RES_001";
-    r1.type = "Ambulance";
-    r1.locationId = "LOC_0010";
-    r1.priority = 25;
+    cout << "Adding visited locations...\n";
 
-    RescueResource r2;
-    r2.id = "RES_002";
-    r2.type = "Rescue Team";
-    r2.locationId = "LOC_0025";
-    r2.priority = 10;
+    visitedLocations.insert("LOC_0001");
+    visitedLocations.insert("LOC_0042");
+    visitedLocations.insert("LOC_0105");
 
-    RescueResource r3;
-    r3.id = "RES_003";
-    r3.type = "Helicopter";
-    r3.locationId = "LOC_0040";
-    r3.priority = 40;
+    // Try adding duplicate
+    visitedLocations.insert("LOC_0042");
 
-    RescueResource r4;
-    r4.id = "RES_004";
-    r4.type = "Ambulance";
-    r4.locationId = "LOC_0015";
-    r4.priority = 15;
+    visitedLocations.display();
 
-    cout << "Adding rescue resources...\n";
+    cout << "\nChecking LOC_0042:\n";
 
-    resourceHeap.insert(r1);
-    resourceHeap.insert(r2);
-    resourceHeap.insert(r3);
-    resourceHeap.insert(r4);
-
-    resourceHeap.display();
-
-    cout << "\nBest resource to dispatch:\n";
-
-    RescueResource best = resourceHeap.peek();
-
-    cout << "ID: " << best.id
-         << " | Type: " << best.type
-         << " | Priority: " << best.priority
-         << endl;
-
-    cout << "\nExtracting resources in priority order:\n";
-
-    while (!resourceHeap.isEmpty())
+    if (visitedLocations.contains("LOC_0042"))
     {
-        RescueResource resource = resourceHeap.extractMin();
-
-        cout << "Dispatched: "
-             << resource.id
-             << " | Priority: "
-             << resource.priority
-             << endl;
+        cout << "LOC_0042 has been visited.\n";
     }
+    else
+    {
+        cout << "LOC_0042 has not been visited.\n";
+    }
+
+    cout << "\nChecking LOC_0231:\n";
+
+    if (visitedLocations.contains("LOC_0231"))
+    {
+        cout << "LOC_0231 has been visited.\n";
+    }
+    else
+    {
+        cout << "LOC_0231 has not been visited.\n";
+    }
+
+    cout << "\nRemoving LOC_0042...\n";
+
+    visitedLocations.remove("LOC_0042");
+
+    cout << "\nChecking LOC_0042 again:\n";
+
+    if (visitedLocations.contains("LOC_0042"))
+    {
+        cout << "LOC_0042 has been visited.\n";
+    }
+    else
+    {
+        cout << "LOC_0042 has not been visited.\n";
+    }
+
+    cout << "\nRemaining locations:";
+
+    visitedLocations.display();
 
     return 0;
 }
