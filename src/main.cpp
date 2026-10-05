@@ -1,62 +1,63 @@
 #include <iostream>
-#include "Emergency.h"
-#include "EmergencyQueue.h"
+
+#include "PathStack.h"
 
 using namespace std;
 
 int main()
 {
-    EmergencyQueue emergencyQueue;
+    PathStack pathStack;
 
-    Emergency e1{
-        "EMG_0001",
-        "LOC_0086",
-        5,
-        20,
-        "10:30"
-    };
 
-    Emergency e2{
-        "EMG_0002",
-        "LOC_0013",
-        8,
-        50,
-        "10:35"
-    };
+    // ==========================================
+    // PUSH LOCATIONS
+    // ==========================================
 
-    Emergency e3{
-        "EMG_0003",
-        "LOC_0023",
-        3,
-        10,
-        "10:40"
-    };
+    cout << "Building path...\n";
 
-    cout << "Adding emergency reports...\n";
+    pathStack.push("LOC_0001");
+    pathStack.push("LOC_0042");
+    pathStack.push("LOC_0105");
+    pathStack.push("LOC_0231");
 
-    emergencyQueue.enqueue(e1);
-    emergencyQueue.enqueue(e2);
-    emergencyQueue.enqueue(e3);
 
-    emergencyQueue.display();
+    // ==========================================
+    // DISPLAY STACK
+    // ==========================================
 
-    cout << "\nFront emergency:\n";
+    cout << "\nStack after pushing locations:";
 
-    Emergency frontEmergency = emergencyQueue.peek();
+    pathStack.display();
 
-    cout << frontEmergency.id << endl;
 
-    cout << "\nProcessing emergency:\n";
+    // ==========================================
+    // PEEK
+    // ==========================================
 
-    Emergency processed = emergencyQueue.dequeue();
+    cout << "\nTop location:\n";
 
-    cout << "Processed: "
-         << processed.id
+    cout << pathStack.peek() << endl;
+
+
+    // ==========================================
+    // POP
+    // ==========================================
+
+    cout << "\nRemoving top location:\n";
+
+    cout << "Removed: "
+         << pathStack.pop()
          << endl;
 
-    cout << "\nRemaining emergencies:\n";
 
-    emergencyQueue.display();
+    // ==========================================
+    // DISPLAY AGAIN
+    // ==========================================
+
+    cout << "\nRemaining path:";
+
+    pathStack.display();
+
 
     return 0;
 }
