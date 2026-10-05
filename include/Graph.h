@@ -14,49 +14,72 @@ class Graph
 {
 private:
 
-    // Stores:
-    // Location ID -> Location object
+    // Location ID -> Location
     unordered_map<string, Location> locations;
 
-    // Adjacency list:
-    // Location ID -> list of outgoing roads
+    // Location ID -> outgoing roads
     unordered_map<string, vector<Edge>> adjacencyList;
 
 public:
 
-    // Add a location to the graph
+    // -------------------------
+    // Location operations
+    // -------------------------
+
     void addLocation(const Location& location);
 
-    // Add a road from source to destination
+    // -------------------------
+    // Road operations
+    // -------------------------
+
     void addRoad(const string& source, const Edge& edge);
 
-    // Remove a road
-    void removeRoad(const string& source, const string& destination);
+    void removeRoad(
+        const string& source,
+        const string& destination
+    );
 
-    // Update a road
     void updateRoad(
         const string& source,
         const string& destination,
         const Edge& updatedEdge
     );
 
-    // Close a road
     void blockRoad(
         const string& source,
         const string& destination
     );
 
-    // Open a road
     void unblockRoad(
         const string& source,
         const string& destination
     );
 
-    // Get all roads going out from a location
-    vector<Edge> getNeighbors(const string& locationId);
+    // -------------------------
+    // Graph operations
+    // -------------------------
 
-    // Display graph
+    vector<Edge> getNeighbors(
+        const string& locationId
+    );
+
     void displayGraph();
+
+    // -------------------------
+    // CSV loading
+    // -------------------------
+
+    bool loadLocations(const string& filename);
+
+    bool loadRoads(const string& filename);
+
+    // -------------------------
+    // Information
+    // -------------------------
+
+    int getLocationCount() const;
+
+    int getRoadCount() const;
 };
 
 #endif

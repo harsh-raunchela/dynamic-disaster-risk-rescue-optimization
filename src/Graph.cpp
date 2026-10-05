@@ -1,17 +1,49 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
+
 #include "Graph.h"
 
 using namespace std;
 
 
-// --------------------------------------------------
-// ADD LOCATION
-// --------------------------------------------------
-// Adds a location to the graph.
+// ==================================================
+// HELPER FUNCTION
+// ==================================================
+// Converts:
 //
-// Example:
-// LOC_0001 -> Village A
-// --------------------------------------------------
+// LOC_93
+//
+// into:
+//
+// LOC_0093
+//
+// This makes the road dataset compatible with
+// locations.csv.
+// ==================================================
+
+string normalizeLocationId(string id)
+{
+    if (id.substr(0, 4) != "LOC_")
+    {
+        return id;
+    }
+
+    string number = id.substr(4);
+
+    while (number.length() < 4)
+    {
+        number = "0" + number;
+    }
+
+    return "LOC_" + number;
+}
+
+
+// ==================================================
+// ADD LOCATION
+// ==================================================
 
 void Graph::addLocation(const Location& location)
 {
@@ -23,44 +55,34 @@ void Graph::addLocation(const Location& location)
 }
 
 
-// --------------------------------------------------
+// ==================================================
 // ADD ROAD
-// --------------------------------------------------
-// Adds a road to the adjacency list.
-//
-// Example:
-// LOC_0001 -> LOC_0002
-// --------------------------------------------------
+// ==================================================
 
-void Graph::addRoad(const string& source, const Edge& edge)
+void Graph::addRoad(
+    const string& source,
+    const Edge& edge
+)
 {
     adjacencyList[source].push_back(edge);
 }
 
 
-// --------------------------------------------------
+// ==================================================
 // GET NEIGHBORS
-// --------------------------------------------------
-// Returns all outgoing roads from a location.
-//
-// Example:
-//
-// LOC_0001
-//    |
-//    |---- LOC_0002
-//    |
-//    |---- LOC_0003
-// --------------------------------------------------
+// ==================================================
 
-vector<Edge> Graph::getNeighbors(const string& locationId)
+vector<Edge> Graph::getNeighbors(
+    const string& locationId
+)
 {
     return adjacencyList[locationId];
 }
 
 
-// --------------------------------------------------
+// ==================================================
 // DISPLAY GRAPH
-// --------------------------------------------------
+// ==================================================
 
 void Graph::displayGraph()
 {
@@ -95,20 +117,9 @@ void Graph::displayGraph()
 }
 
 
-// --------------------------------------------------
+// ==================================================
 // BLOCK ROAD
-// --------------------------------------------------
-// Changes road status to Closed.
-//
-// Example:
-// LOC_0001 -> LOC_0002
-// status = Open
-//
-// becomes:
-//
-// LOC_0001 -> LOC_0002
-// status = Closed
-// --------------------------------------------------
+// ==================================================
 
 void Graph::blockRoad(
     const string& source,
@@ -126,11 +137,9 @@ void Graph::blockRoad(
 }
 
 
-// --------------------------------------------------
+// ==================================================
 // UNBLOCK ROAD
-// --------------------------------------------------
-// Changes road status to Open.
-// --------------------------------------------------
+// ==================================================
 
 void Graph::unblockRoad(
     const string& source,
@@ -148,9 +157,9 @@ void Graph::unblockRoad(
 }
 
 
-// --------------------------------------------------
+// ==================================================
 // REMOVE ROAD
-// --------------------------------------------------
+// ==================================================
 
 void Graph::removeRoad(
     const string& source,
@@ -170,9 +179,9 @@ void Graph::removeRoad(
 }
 
 
-// --------------------------------------------------
+// ==================================================
 // UPDATE ROAD
-// --------------------------------------------------
+// ==================================================
 
 void Graph::updateRoad(
     const string& source,
@@ -188,4 +197,200 @@ void Graph::updateRoad(
             return;
         }
     }
+}
+
+
+// ==================================================
+// LOAD LOCATIONS FROM CSV
+// ==================================================
+
+bool Graph::loadLocations(const string& filename)
+{
+    ifstream file(filename);
+
+    if (!file.is_open())
+    {
+        cout << "Error: Could not open "
+             << filename << endl;
+
+        return false;
+    }
+
+    string line;
+
+    // Skip header
+    getline(file, line);
+
+    int count = 0;
+
+    while (getline(file, line))
+    {
+        if (line.empty())
+        {
+            continue;
+        }
+
+        stringstream ss(line);
+
+        string id;
+        string name;
+        string type;
+        string latitude;
+        string longitude;
+        string capacity;
+
+        getline(ss, id, ',');
+        getline(ss, name, ',');
+        getline(ss, type, ',');
+        getline(ss, latitude, ',');
+        getline(ss, longitude, ',');
+        getline(ss, capacity, ',');
+
+        Location location;
+
+        location.id = normalizeLocationId(id);
+        location.name = name;
+        location.type = type;
+
+        location.latitude = stod(latitude);
+        location.longitude = stod(longitude);
+
+        location.capacity = stoi(capacity);
+
+        addLocation(location);
+
+        count++;
+    }
+
+    file.close();
+
+    cout << "Locations loaded: "
+         << count << endl;
+
+    return true;
+}
+
+
+// ==================================================
+// LOAD ROADS FROM CSV
+// ==================================================
+
+bool Graph::loadRoads(const string& filename)
+{
+    ifstream file(filename);
+
+    if (!file.is_open())
+    {
+        cout << "Error: Could not open "
+             << filename << endl;
+
+        return false;
+    }
+
+    string line;
+
+    // Skip header
+    getline(file, line);
+
+    int count = 0;
+    int invalidRoads = 0;
+
+    while (getline(file, line))
+    {
+        if (line.empty())
+        {
+            continue;
+        }
+
+        stringstream ss(line);
+
+        string roadId;
+        string source;
+        string destination;
+        string distance;
+        string travelTime;
+        string risk;
+        string traffic;
+        string roadCondition;
+        string status;
+
+        getline(ss, roadId, ',');
+        getline(ss, source, ',');
+        getline(ss, destination, ',');
+        getline(ss, distance, ',');
+        getline(ss, travelTime, ',');
+        getline(ss, risk, ',');
+        getline(ss, traffic, ',');
+        getline(ss, roadCondition, ',');
+        getline(ss, status, ',');
+
+        // Normalize road location IDs
+        source = normalizeLocationId(source);
+        destination = normalizeLocationId(destination);
+
+        // Make sure both locations exist
+        if (locations.find(source) == locations.end() ||
+            locations.find(destination) == locations.end())
+        {
+            invalidRoads++;
+            continue;
+        }
+
+        Edge road;
+
+        road.destination = destination;
+
+        road.distance = stod(distance);
+        road.travelTime = stod(travelTime);
+
+        road.risk = risk;
+        road.traffic = traffic;
+        road.roadCondition = roadCondition;
+
+        road.status = status;
+
+        addRoad(source, road);
+
+        count++;
+    }
+
+    file.close();
+
+    cout << "Roads loaded: "
+         << count << endl;
+
+    if (invalidRoads > 0)
+    {
+        cout << "Invalid roads skipped: "
+             << invalidRoads << endl;
+    }
+
+    return true;
+}
+
+
+// ==================================================
+// GET LOCATION COUNT
+// ==================================================
+
+int Graph::getLocationCount() const
+{
+    return locations.size();
+}
+
+
+// ==================================================
+// GET ROAD COUNT
+// ==================================================
+
+int Graph::getRoadCount() const
+{
+    int count = 0;
+
+    for (const auto& pair : adjacencyList)
+    {
+        count += pair.second.size();
+    }
+
+    return count;
 }

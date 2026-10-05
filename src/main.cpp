@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "Graph.h"
 
 using namespace std;
@@ -8,158 +9,132 @@ int main()
     Graph graph;
 
 
-    // --------------------------------------------------
-    // CREATE LOCATIONS
-    // --------------------------------------------------
-
-    Location l1{
-        "LOC_0001",
-        "Village A",
-        "VILLAGE",
-        30.1000,
-        78.1000,
-        200
-    };
-
-    Location l2{
-        "LOC_0002",
-        "Junction 1",
-        "JUNCTION",
-        30.1100,
-        78.1100,
-        0
-    };
-
-    Location l3{
-        "LOC_0003",
-        "Central Hospital",
-        "HOSPITAL",
-        30.1200,
-        78.1200,
-        500
-    };
-
-
-    // --------------------------------------------------
-    // ADD LOCATIONS TO GRAPH
-    // --------------------------------------------------
-
-    graph.addLocation(l1);
-    graph.addLocation(l2);
-    graph.addLocation(l3);
-
-
-    // --------------------------------------------------
-    // CREATE ROADS
-    // --------------------------------------------------
-
-    Edge road1{
-        "LOC_0002",
-        5.0,
-        10.0,
-        "Medium",
-        "Low",
-        "Good",
-        "Open"
-    };
-
-    Edge road2{
-        "LOC_0003",
-        7.0,
-        15.0,
-        "High",
-        "Medium",
-        "Fair",
-        "Open"
-    };
-
-
-    // --------------------------------------------------
-    // ADD ROADS
-    // --------------------------------------------------
-
-    graph.addRoad("LOC_0001", road1);
-    graph.addRoad("LOC_0002", road2);
-
-
-    // --------------------------------------------------
-    // DISPLAY INITIAL GRAPH
-    // --------------------------------------------------
+    // ==================================================
+    // LOAD LOCATIONS
+    // ==================================================
 
     cout << "========================================\n";
-    cout << "       INITIAL DISASTER NETWORK\n";
-    cout << "========================================\n";
+    cout << "       DISASTERX GRAPH LOADING\n";
+    cout << "========================================\n\n";
 
-    graph.displayGraph();
+    if (!graph.loadLocations("data/locations.csv"))
+    {
+        return 1;
+    }
 
 
-    // --------------------------------------------------
-    // BLOCK ROAD
-    // --------------------------------------------------
+    // ==================================================
+    // LOAD ROADS
+    // ==================================================
+
+    if (!graph.loadRoads("data/roads.csv"))
+    {
+        return 1;
+    }
+
+
+    // ==================================================
+    // DISPLAY STATISTICS
+    // ==================================================
 
     cout << "\n========================================\n";
-    cout << "Blocking road LOC_0001 -> LOC_0002\n";
+    cout << "          GRAPH STATISTICS\n";
     cout << "========================================\n";
 
-    graph.blockRoad("LOC_0001", "LOC_0002");
+    cout << "Total locations: "
+         << graph.getLocationCount()
+         << endl;
 
-    graph.displayGraph();
+    cout << "Total roads: "
+         << graph.getRoadCount()
+         << endl;
 
 
-    // --------------------------------------------------
-    // UNBLOCK ROAD
-    // --------------------------------------------------
+    // ==================================================
+    // TEST BLOCKING A ROAD
+    // ==================================================
 
     cout << "\n========================================\n";
-    cout << "Restoring road LOC_0001 -> LOC_0002\n";
+    cout << "          TESTING ROAD BLOCK\n";
     cout << "========================================\n";
 
-    graph.unblockRoad("LOC_0001", "LOC_0002");
+    cout << "Blocking LOC_0093 -> LOC_0084\n";
 
-    graph.displayGraph();
-
-
-    // --------------------------------------------------
-    // UPDATE ROAD
-    // --------------------------------------------------
-
-    cout << "\n========================================\n";
-    cout << "Updating road LOC_0002 -> LOC_0003\n";
-    cout << "========================================\n";
-
-    Edge updatedRoad{
-        "LOC_0003",
-        8.5,
-        20.0,
-        "Critical",
-        "Severe",
-        "Damaged",
-        "Restricted"
-    };
-
-    graph.updateRoad(
-        "LOC_0002",
-        "LOC_0003",
-        updatedRoad
+    graph.blockRoad(
+        "LOC_0093",
+        "LOC_0084"
     );
 
-    graph.displayGraph();
 
+    // ==================================================
+    // TEST UNBLOCKING
+    // ==================================================
 
-    // --------------------------------------------------
-    // REMOVE ROAD
-    // --------------------------------------------------
+    cout << "Restoring LOC_0093 -> LOC_0084\n";
 
-    cout << "\n========================================\n";
-    cout << "Removing road LOC_0002 -> LOC_0003\n";
-    cout << "========================================\n";
-
-    graph.removeRoad(
-        "LOC_0002",
-        "LOC_0003"
+    graph.unblockRoad(
+        "LOC_0093",
+        "LOC_0084"
     );
 
-    graph.displayGraph();
+
+    // ==================================================
+    // TEST NEIGHBORS
+    // ==================================================
+
+    cout << "\n========================================\n";
+    cout << "       TESTING GRAPH NEIGHBORS\n";
+    cout << "========================================\n";
+
+    vector<Edge> neighbors =
+        graph.getNeighbors("LOC_0093");
+
+    cout << "Number of roads from LOC_0093: "
+         << neighbors.size()
+         << endl;
+
+
+    // ==================================================
+    // TEST ONE ROAD\n
+    // ==================================================
+
+    if (!neighbors.empty())
+    {
+        cout << "\nFirst outgoing road:\n";
+
+        cout << "Destination: "
+             << neighbors[0].destination
+             << endl;
+
+        cout << "Distance: "
+             << neighbors[0].distance
+             << endl;
+
+        cout << "Travel Time: "
+             << neighbors[0].travelTime
+             << endl;
+
+        cout << "Risk: "
+             << neighbors[0].risk
+             << endl;
+
+        cout << "Traffic: "
+             << neighbors[0].traffic
+             << endl;
+
+        cout << "Road Condition: "
+             << neighbors[0].roadCondition
+             << endl;
+
+        cout << "Status: "
+             << neighbors[0].status
+             << endl;
+    }
+
+
+    cout << "\n========================================\n";
+    cout << "       PHASE 2 GRAPH TEST COMPLETE\n";
+    cout << "========================================\n";
 
 
     return 0;
