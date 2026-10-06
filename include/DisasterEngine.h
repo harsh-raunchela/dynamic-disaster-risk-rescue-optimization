@@ -2,6 +2,8 @@
 #define DISASTERX_DISASTER_ENGINE_H
 
 #include "Graph.h"
+#include "EmergencyPriorityQueue.h"
+
 #include <string>
 
 using namespace std;
@@ -10,6 +12,7 @@ class DisasterEngine
 {
 private:
     Graph* graph;
+    EmergencyPriorityQueue emergencyQueue;
 
 public:
     DisasterEngine(Graph* graph);
@@ -33,6 +36,14 @@ public:
     void displayRoads(
         const string& locationId
     );
+
+    void addEmergency(
+        const Emergency& emergency
+    );
+
+    void processNextEmergency();
+
+    void displayEmergencies();
 };
 
 #endif
