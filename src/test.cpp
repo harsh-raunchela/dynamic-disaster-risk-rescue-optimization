@@ -3,8 +3,9 @@ using namespace std;
 
 int main()
 {
-    cout << "Testing locations..." << endl;
-    cout << "Location: Village A" << endl;
-    cout << "Location: Junction A" << endl;
+    cout << "Testing resources..." << endl;
+    cout << "Resource: Ambulance" << endl;
+    cout << "Resource: Rescue Team" << endl;
+    cout << "Resource: Emergency Kit" << endl;
     return 0;
 }
