@@ -3,7 +3,8 @@ using namespace std;
 
 int main()
 {
-    cout << "Testing Disaster Engine..." << endl;
-    cout << "Disaster Engine is working." << endl;
+    cout << "Testing locations..." << endl;
+    cout << "Location: Village A" << endl;
+    cout << "Location: Junction A" << endl;
     return 0;
 }
