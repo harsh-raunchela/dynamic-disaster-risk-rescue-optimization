@@ -31,6 +31,8 @@ public:
     vector<Edge> getNeighbors(const string& locationId) const;
     vector<string> getLocationIds() const;
 
+    const Location* getLocation(const string& locationId) const;
+
     void displayGraph();
 
     bool loadLocations(const string& filename);

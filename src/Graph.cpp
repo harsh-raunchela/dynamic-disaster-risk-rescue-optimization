@@ -412,3 +412,16 @@ vector<string> Graph::getLocationIds() const
 
     return ids;
 }
+
+
+const Location* Graph::getLocation(const string& locationId) const
+{
+    auto it = locations.find(locationId);
+
+    if (it == locations.end())
+    {
+        return nullptr;
+    }
+
+    return &it->second;
+}
