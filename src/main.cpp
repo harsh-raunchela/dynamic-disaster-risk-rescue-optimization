@@ -1,63 +1,69 @@
 #include <iostream>
-#include "LocationSet.h"
+#include "EmergencyPriorityQueue.h"
 
 using namespace std;
 
 int main()
 {
-    LocationSet visitedLocations;
+    EmergencyPriorityQueue priorityQueue;
 
-    cout << "Adding visited locations...\n";
+    Emergency e1;
+    e1.id = "EMG_0001";
+    e1.locationId = "LOC_0010";
+    e1.severity = 3;
+    e1.peopleAffected = 10;
+    e1.reportedTime = "10:30";
 
-    visitedLocations.insert("LOC_0001");
-    visitedLocations.insert("LOC_0042");
-    visitedLocations.insert("LOC_0105");
+    Emergency e2;
+    e2.id = "EMG_0002";
+    e2.locationId = "LOC_0025";
+    e2.severity = 9;
+    e2.peopleAffected = 50;
+    e2.reportedTime = "10:35";
 
-    // Try adding duplicate
-    visitedLocations.insert("LOC_0042");
+    Emergency e3;
+    e3.id = "EMG_0003";
+    e3.locationId = "LOC_0040";
+    e3.severity = 5;
+    e3.peopleAffected = 25;
+    e3.reportedTime = "10:40";
 
-    visitedLocations.display();
+    Emergency e4;
+    e4.id = "EMG_0004";
+    e4.locationId = "LOC_0055";
+    e4.severity = 10;
+    e4.peopleAffected = 100;
+    e4.reportedTime = "10:45";
 
-    cout << "\nChecking LOC_0042:\n";
+    cout << "Adding emergency reports...\n";
 
-    if (visitedLocations.contains("LOC_0042"))
+    priorityQueue.enqueue(e1);
+    priorityQueue.enqueue(e2);
+    priorityQueue.enqueue(e3);
+    priorityQueue.enqueue(e4);
+
+    priorityQueue.display();
+
+    cout << "\nMost critical emergency:\n";
+
+    Emergency critical = priorityQueue.peek();
+
+    cout << "ID: " << critical.id
+         << " | Severity: " << critical.severity
+         << endl;
+
+    cout << "\nProcessing emergencies by priority:\n";
+
+    while (!priorityQueue.isEmpty())
     {
-        cout << "LOC_0042 has been visited.\n";
+        Emergency emergency = priorityQueue.dequeue();
+
+        cout << "Processing: "
+             << emergency.id
+             << " | Severity: "
+             << emergency.severity
+             << endl;
     }
-    else
-    {
-        cout << "LOC_0042 has not been visited.\n";
-    }
-
-    cout << "\nChecking LOC_0231:\n";
-
-    if (visitedLocations.contains("LOC_0231"))
-    {
-        cout << "LOC_0231 has been visited.\n";
-    }
-    else
-    {
-        cout << "LOC_0231 has not been visited.\n";
-    }
-
-    cout << "\nRemoving LOC_0042...\n";
-
-    visitedLocations.remove("LOC_0042");
-
-    cout << "\nChecking LOC_0042 again:\n";
-
-    if (visitedLocations.contains("LOC_0042"))
-    {
-        cout << "LOC_0042 has been visited.\n";
-    }
-    else
-    {
-        cout << "LOC_0042 has not been visited.\n";
-    }
-
-    cout << "\nRemaining locations:";
-
-    visitedLocations.display();
 
     return 0;
 }
