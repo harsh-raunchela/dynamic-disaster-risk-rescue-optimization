@@ -86,3 +86,57 @@ void DisasterEngine::displayRoads(
              << endl;
     }
 }
+void DisasterEngine::addEmergency(
+    const Emergency& emergency)
+{
+    emergencyQueue.enqueue(emergency);
+
+    cout << "Emergency added: "
+         << emergency.id
+         << " | Severity: "
+         << emergency.severity
+         << endl;
+}
+
+void DisasterEngine::processNextEmergency()
+{
+    if (emergencyQueue.isEmpty())
+    {
+        cout << "No emergency reports to process."
+             << endl;
+
+        return;
+    }
+
+    Emergency emergency =
+        emergencyQueue.dequeue();
+
+    cout << "\nProcessing emergency:\n";
+
+    cout << "ID: "
+         << emergency.id
+         << endl;
+
+    cout << "Location: "
+         << emergency.locationId
+         << endl;
+
+    cout << "Severity: "
+         << emergency.severity
+         << endl;
+
+    cout << "People Affected: "
+         << emergency.peopleAffected
+         << endl;
+
+    cout << "Reported Time: "
+         << emergency.reportedTime
+         << endl;
+}
+
+void DisasterEngine::displayEmergencies()
+{
+    cout << "\nEmergency Queue:\n";
+
+    emergencyQueue.display();
+}
