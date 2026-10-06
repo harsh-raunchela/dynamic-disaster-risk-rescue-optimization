@@ -72,11 +72,16 @@ void Graph::addRoad(
 // GET NEIGHBORS
 // ==================================================
 
-vector<Edge> Graph::getNeighbors(
-    const string& locationId
-)
+vector<Edge> Graph::getNeighbors(const string& locationId) const
 {
-    return adjacencyList[locationId];
+    auto it = adjacencyList.find(locationId);
+
+    if (it == adjacencyList.end())
+    {
+        return {};
+    }
+
+    return it->second;
 }
 
 
@@ -393,4 +398,17 @@ int Graph::getRoadCount() const
     }
 
     return count;
+}
+
+
+vector<string> Graph::getLocationIds() const
+{
+    vector<string> ids;
+
+    for (const auto& pair : locations)
+    {
+        ids.push_back(pair.first);
+    }
+
+    return ids;
 }

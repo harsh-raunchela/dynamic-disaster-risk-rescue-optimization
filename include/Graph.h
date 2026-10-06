@@ -21,64 +21,22 @@ private:
     unordered_map<string, vector<Edge>> adjacencyList;
 
 public:
-
-    // -------------------------
-    // Location operations
-    // -------------------------
-
     void addLocation(const Location& location);
-
-    // -------------------------
-    // Road operations
-    // -------------------------
-
     void addRoad(const string& source, const Edge& edge);
+    void removeRoad(const string& source, const string& destination);
+    void updateRoad(const string& source, const string& destination, const Edge& updatedEdge);
+    void blockRoad(const string& source, const string& destination);
+    void unblockRoad(const string& source, const string& destination);
 
-    void removeRoad(
-        const string& source,
-        const string& destination
-    );
-
-    void updateRoad(
-        const string& source,
-        const string& destination,
-        const Edge& updatedEdge
-    );
-
-    void blockRoad(
-        const string& source,
-        const string& destination
-    );
-
-    void unblockRoad(
-        const string& source,
-        const string& destination
-    );
-
-    // -------------------------
-    // Graph operations
-    // -------------------------
-
-    vector<Edge> getNeighbors(
-        const string& locationId
-    );
+    vector<Edge> getNeighbors(const string& locationId) const;
+    vector<string> getLocationIds() const;
 
     void displayGraph();
 
-    // -------------------------
-    // CSV loading
-    // -------------------------
-
     bool loadLocations(const string& filename);
-
     bool loadRoads(const string& filename);
 
-    // -------------------------
-    // Information
-    // -------------------------
-
     int getLocationCount() const;
-
     int getRoadCount() const;
 };
 
