@@ -3,7 +3,7 @@ using namespace std;
 
 int main()
 {
-    cout << "Testing roads..." << endl;
-    cout << "Road status: Open" << endl;
+    cout << "Testing Disaster Engine..." << endl;
+    cout << "Disaster Engine is working." << endl;
     return 0;
 }
