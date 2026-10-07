@@ -185,3 +185,50 @@ void DisasterEngine::dispatchResource()
          << resource.priority
          << endl;
 }
+
+void DisasterEngine::findRoute(
+    const string& source,
+    const string& destination)
+{
+    cout << "\nFinding best rescue route...\n";
+
+    vector<string> route =
+        RouteDecisionEngine::findBestRoute(
+            *graph,
+            source,
+            destination
+        );
+
+    if (route.empty())
+    {
+        cout << "No route available."
+             << endl;
+
+        return;
+    }
+
+    cout << "\nRecommended Rescue Route:\n";
+
+    for (size_t i = 0; i < route.size(); i++)
+    {
+        cout << route[i];
+
+        if (i < route.size() - 1)
+        {
+            cout << " -> ";
+        }
+    }
+
+    cout << endl;
+
+    double cost =
+        RouteDecisionEngine::getRouteCost(
+            *graph,
+            source,
+            destination
+        );
+
+    cout << "Total Route Cost: "
+         << cost
+         << endl;
+}
