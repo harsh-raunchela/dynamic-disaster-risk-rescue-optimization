@@ -4,6 +4,7 @@
 #include "Graph.h"
 #include "EmergencyPriorityQueue.h"
 #include "MinHeap.h"
+#include "RouteDecisionEngine.h"
 
 #include <string>
 
@@ -50,6 +51,11 @@ public:
     void addResource(const RescueResource& resource);
 
     void dispatchResource();
+
+    void findRoute(
+        const string& source,
+        const string& destination
+    );
 };
 
 #endif
