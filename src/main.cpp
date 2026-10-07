@@ -64,5 +64,32 @@ int main()
     // Display remaining emergencies
     engine.displayEmergencies();
 
+    // Add rescue resources
+    RescueResource r1;
+    r1.id = "RES_001";
+    r1.type = "Ambulance";
+    r1.locationId = "LOC_0001";
+    r1.priority = 25;
+
+    RescueResource r2;
+    r2.id = "RES_002";
+    r2.type = "Rescue Team";
+    r2.locationId = "LOC_0002";
+    r2.priority = 10;
+
+    RescueResource r3;
+    r3.id = "RES_003";
+    r3.type = "Fire Truck";
+    r3.locationId = "LOC_0001";
+    r3.priority = 40;
+
+    // Add resources to resource heap
+    engine.addResource(r1);
+    engine.addResource(r2);
+    engine.addResource(r3);
+
+    // Dispatch highest priority resource
+    engine.dispatchResource();
+
     return 0;
 }
