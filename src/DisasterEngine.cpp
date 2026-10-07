@@ -140,3 +140,48 @@ void DisasterEngine::displayEmergencies()
 
     emergencyQueue.display();
 }
+void DisasterEngine::addResource(
+    const RescueResource& resource)
+{
+    resourceHeap.insert(resource);
+
+    cout << "Resource added: "
+         << resource.id
+         << " | Type: "
+         << resource.type
+         << " | Priority: "
+         << resource.priority
+         << endl;
+}
+
+void DisasterEngine::dispatchResource()
+{
+    if (resourceHeap.isEmpty())
+    {
+        cout << "No rescue resources available."
+             << endl;
+
+        return;
+    }
+
+    RescueResource resource =
+        resourceHeap.extractMin();
+
+    cout << "\nDispatching rescue resource:\n";
+
+    cout << "Resource ID: "
+         << resource.id
+         << endl;
+
+    cout << "Type: "
+         << resource.type
+         << endl;
+
+    cout << "Location: "
+         << resource.locationId
+         << endl;
+
+    cout << "Priority: "
+         << resource.priority
+         << endl;
+}
