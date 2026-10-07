@@ -3,6 +3,7 @@
 
 #include "Graph.h"
 #include "EmergencyPriorityQueue.h"
+#include "MinHeap.h"
 
 #include <string>
 
@@ -13,6 +14,7 @@ class DisasterEngine
 private:
     Graph* graph;
     EmergencyPriorityQueue emergencyQueue;
+    MinHeap resourceHeap;
 
 public:
     DisasterEngine(Graph* graph);
@@ -44,6 +46,10 @@ public:
     void processNextEmergency();
 
     void displayEmergencies();
+
+    void addResource(const RescueResource& resource);
+
+    void dispatchResource();
 };
 
 #endif
