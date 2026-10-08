@@ -1,53 +1,18 @@
 #include <iostream>
-<<<<<<< HEAD
-=======
+#include <iostream>
 #include <queue>
 #include <unordered_map>
-#include <unordered_set>
 #include <algorithm>
->>>>>>> e99e837 (Implement dynamic route rerouting)
 
 #include "RouteDecisionEngine.h"
 
 using namespace std;
 
-<<<<<<< HEAD
-=======
-
-// ==================================================
-// FIND BEST ROUTE
-// ==================================================
-
->>>>>>> e99e837 (Implement dynamic route rerouting)
 vector<string> RouteDecisionEngine::findBestRoute(
     const Graph& graph,
     const string& source,
     const string& destination)
 {
-<<<<<<< HEAD
-    /*
-        For disaster situations, use A* because
-        it uses geographic information to guide
-        the search while considering disaster cost.
-    */
-
-    vector<string> path =
-        AStar::findPath(
-            graph,
-            source,
-            destination
-        );
-
-    return path;
-}
-
-double RouteDecisionEngine::getRouteCost(
-    const Graph& graph,
-    const string& source,
-    const string& destination)
-{
-    return AStar::getPathCost(
-=======
     unordered_map<string, double> cost;
     unordered_map<string, string> parent;
 
@@ -72,11 +37,11 @@ double RouteDecisionEngine::getRouteCost(
             break;
         }
 
-        vector<Edge> roads = graph.getNeighbors(current);
+        vector<Edge> roads =
+            graph.getNeighbors(current);
 
         for (const Edge& road : roads)
         {
-            // Closed roads cannot be used
             if (road.status == "Closed")
             {
                 continue;
@@ -99,13 +64,11 @@ double RouteDecisionEngine::getRouteCost(
         }
     }
 
-    // No route found
     if (cost.find(destination) == cost.end())
     {
         return {};
     }
 
-    // Build route backwards
     vector<string> route;
 
     string current = destination;
@@ -118,15 +81,13 @@ double RouteDecisionEngine::getRouteCost(
 
     route.push_back(source);
 
-    reverse(route.begin(), route.end());
+    reverse(
+        route.begin(),
+        route.end()
+    );
 
     return route;
 }
-
-
-// ==================================================
-// GET ROUTE COST
-// ==================================================
 
 double RouteDecisionEngine::getRouteCost(
     const Graph& graph,
@@ -151,11 +112,6 @@ double RouteDecisionEngine::getRouteCost(
 
     return totalCost;
 }
-
-
-// ==================================================
-// DYNAMIC RE-ROUTING
-// ==================================================
 
 vector<string> RouteDecisionEngine::reroute(
     const Graph& graph,
@@ -221,7 +177,6 @@ vector<string> RouteDecisionEngine::reroute(
     cout << "Recalculating route...\n";
 
     return findBestRoute(
->>>>>>> e99e837 (Implement dynamic route rerouting)
         graph,
         source,
         destination
