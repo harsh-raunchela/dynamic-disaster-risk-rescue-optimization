@@ -221,14 +221,60 @@ void DisasterEngine::findRoute(
 
     cout << endl;
 
-    double cost =
-        RouteDecisionEngine::getRouteCost(
+  double cost =
+    RouteDecisionEngine::getRouteCost(
+        *graph,
+        route
+    );
+
+    cout << "Total Route Cost: "
+         << cost
+         << endl;
+}
+void DisasterEngine::reroute(
+    const vector<string>& currentRoute,
+    const string& source,
+    const string& destination)
+{
+    cout << "\nChecking for alternative route...\n";
+
+    vector<string> newRoute =
+        RouteDecisionEngine::reroute(
             *graph,
+            currentRoute,
             source,
             destination
         );
 
-    cout << "Total Route Cost: "
+    if (newRoute.empty())
+    {
+        cout << "No alternative route available."
+             << endl;
+
+        return;
+    }
+
+    cout << "\nUpdated Rescue Route:\n";
+
+    for (size_t i = 0; i < newRoute.size(); i++)
+    {
+        cout << newRoute[i];
+
+        if (i < newRoute.size() - 1)
+        {
+            cout << " -> ";
+        }
+    }
+
+    cout << endl;
+
+    double cost =
+        RouteDecisionEngine::getRouteCost(
+            *graph,
+            newRoute
+        );
+
+    cout << "New Route Cost: "
          << cost
          << endl;
 }
