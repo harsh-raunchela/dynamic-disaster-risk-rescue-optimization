@@ -7,6 +7,7 @@
 #include "RouteDecisionEngine.h"
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -48,7 +49,9 @@ public:
 
     void displayEmergencies();
 
-    void addResource(const RescueResource& resource);
+    void addResource(
+        const RescueResource& resource
+    );
 
     void dispatchResource();
 
@@ -56,6 +59,14 @@ public:
         const string& source,
         const string& destination
     );
+
+    void reroute(
+        const vector<string>& currentRoute,
+        const string& source,
+        const string& destination
+    );
+
+    void runDisasterSimulation();
 };
 
 #endif
