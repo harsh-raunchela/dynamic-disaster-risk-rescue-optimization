@@ -400,28 +400,3 @@ int Graph::getRoadCount() const
     return count;
 }
 
-
-vector<string> Graph::getLocationIds() const
-{
-    vector<string> ids;
-
-    for (const auto& pair : locations)
-    {
-        ids.push_back(pair.first);
-    }
-
-    return ids;
-}
-
-
-const Location* Graph::getLocation(const string& locationId) const
-{
-    auto it = locations.find(locationId);
-
-    if (it == locations.end())
-    {
-        return nullptr;
-    }
-
-    return &it->second;
-}
