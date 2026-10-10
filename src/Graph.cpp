@@ -400,3 +400,30 @@ int Graph::getRoadCount() const
     return count;
 }
 
+
+
+bool Graph::updateRoadRisk(
+    const string& source,
+    const string& destination,
+    const string& risk)
+{
+    auto it = adjacencyList.find(source);
+
+    if (it == adjacencyList.end())
+    {
+        return false;
+    }
+
+    for (Edge& edge : it->second)
+    {
+        if (edge.destination == destination)
+        {
+            edge.risk = risk;
+
+            return true;
+        }
+    }
+
+    return false;
+}
+

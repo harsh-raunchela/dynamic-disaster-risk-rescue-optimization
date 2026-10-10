@@ -54,6 +54,12 @@ public:
         const string& locationId
     ) const;
 
+    bool updateRoadRisk(
+        const string& source,
+        const string& destination,
+        const string& risk
+    );
+
     vector<string> getLocationIds() const;
 
     const Location* getLocation(

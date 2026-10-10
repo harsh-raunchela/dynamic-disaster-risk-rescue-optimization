@@ -14,17 +14,21 @@ double Dijkstra::calculateCost(const Edge& edge)
 
     // Risk penalty
     if (edge.risk == "Low")
-    {
-        cost += 0;
-    }
-    else if (edge.risk == "Medium")
-    {
-        cost += 10;
-    }
-    else if (edge.risk == "High")
-    {
-        cost += 25;
-    }
+{
+    cost += 0;
+}
+else if (edge.risk == "Medium")
+{
+    cost += 10;
+}
+else if (edge.risk == "High")
+{
+    cost += 25;
+}
+else if (edge.risk == "Critical")
+{
+    cost += 50;
+}
 
     // Traffic penalty
     if (edge.traffic == "Low")
