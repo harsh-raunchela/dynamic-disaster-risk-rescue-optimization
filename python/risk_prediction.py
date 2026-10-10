@@ -203,3 +203,89 @@ print("\nRisk distribution:")
 print(y.value_counts().sort_index())
 
 print("\nPhase 6.1 preprocessing completed.")
+
+
+
+
+# ==========================================
+# 11. TRAIN RANDOM FOREST MODEL
+# ==========================================
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+
+print("\nTraining Random Forest model...")
+
+
+model = RandomForestClassifier(
+    n_estimators=100,
+    random_state=42
+)
+
+
+model.fit(
+    X_train,
+    y_train
+)
+
+
+# ==========================================
+# 12. MAKE PREDICTIONS
+# ==========================================
+
+y_pred = model.predict(X_test)
+
+
+# ==========================================
+# 13. MODEL ACCURACY
+# ==========================================
+
+accuracy = accuracy_score(
+    y_test,
+    y_pred
+)
+
+
+print(
+    "\nModel Accuracy:",
+    round(accuracy * 100, 2),
+    "%"
+)
+
+
+# ==========================================
+# 14. CLASSIFICATION REPORT
+# ==========================================
+
+print("\nClassification Report:")
+
+print(
+    classification_report(
+        y_test,
+        y_pred,
+        target_names=[
+            "Low",
+            "Medium",
+            "High"
+        ]
+    )
+)
+
+
+# ==========================================
+# 15. FEATURE IMPORTANCE
+# ==========================================
+
+print("\nFeature Importance:")
+
+for feature, importance in zip(
+    X.columns,
+    model.feature_importances_
+):
+    print(
+        f"{feature}: {importance:.4f}"
+    )
+
+
+print("\nPhase 6.2 model training completed.")
