@@ -1,6 +1,8 @@
 import pandas as pd
+
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
 
 
 # ==========================================
@@ -15,18 +17,7 @@ print("Locations loaded:", len(locations))
 
 
 # ==========================================
-# 2. DISPLAY DATA
-# ==========================================
-
-print("\nRoad columns:")
-print(roads.columns.tolist())
-
-print("\nFirst 5 roads:")
-print(roads.head())
-
-
-# ==========================================
-# 3. NORMALIZE LOCATION IDs
+# 2. NORMALIZE LOCATION IDs
 # ==========================================
 
 def normalize_location_id(location_id):
@@ -51,7 +42,7 @@ roads["destination"] = roads["destination"].apply(
 
 
 # ==========================================
-# 4. VERIFY LOCATION IDs
+# 3. VERIFY LOCATION IDs
 # ==========================================
 
 location_ids = set(locations["id"])
@@ -64,11 +55,7 @@ invalid_destinations = roads[
     ~roads["destination"].isin(location_ids)
 ]
 
-print(
-    "\nInvalid source IDs:",
-    len(invalid_sources)
-)
-
+print("\nInvalid source IDs:", len(invalid_sources))
 print(
     "Invalid destination IDs:",
     len(invalid_destinations)
@@ -76,26 +63,7 @@ print(
 
 
 # ==========================================
-# 5. SELECT ML FEATURES
-# ==========================================
-
-features = [
-    "distance",
-    "travel_time",
-    "traffic",
-    "road_condition",
-    "status"
-]
-
-target = "risk"
-
-
-X = roads[features].copy()
-y = roads[target].copy()
-
-
-# ==========================================
-# 6. ENCODE CATEGORICAL FEATURES
+# 4. CONVERT CATEGORICAL VALUES
 # ==========================================
 
 traffic_mapping = {
@@ -117,110 +85,221 @@ status_mapping = {
     "Closed": 1
 }
 
-risk_mapping = {
-    "Low": 0,
-    "Medium": 1,
-    "High": 2
-}
 
-
-X["traffic"] = X["traffic"].map(
+roads["traffic_score"] = roads["traffic"].map(
     traffic_mapping
 )
 
-X["road_condition"] = X["road_condition"].map(
+roads["condition_score"] = roads["road_condition"].map(
     condition_mapping
 )
 
-X["status"] = X["status"].map(
+roads["status_score"] = roads["status"].map(
     status_mapping
 )
 
-y = y.map(risk_mapping)
+
+# ==========================================
+# 5. NORMALIZE DISTANCE
+# ==========================================
+
+distance_min = roads["distance"].min()
+distance_max = roads["distance"].max()
+
+roads["distance_score"] = (
+    (roads["distance"] - distance_min)
+    /
+    (distance_max - distance_min)
+) * 10
 
 
 # ==========================================
-# 7. CHECK MISSING VALUES
+# 6. NORMALIZE TRAVEL TIME
+# ==========================================
+
+time_min = roads["travel_time"].min()
+time_max = roads["travel_time"].max()
+
+roads["travel_time_score"] = (
+    (roads["travel_time"] - time_min)
+    /
+    (time_max - time_min)
+) * 10
+
+
+# ==========================================
+# 7. CALCULATE DISASTER RISK SCORE
+# ==========================================
+
+roads["disaster_risk_score"] = (
+
+    roads["traffic_score"] / 3 * 20
+
+    +
+
+    roads["condition_score"] / 3 * 30
+
+    +
+
+    roads["status_score"] * 30
+
+    +
+
+    roads["travel_time_score"]
+
+    +
+
+    roads["distance_score"]
+)
+
+
+# ==========================================
+# 8. CONVERT SCORE TO RISK CLASS
+# ==========================================
+
+def classify_risk(score):
+
+    if score <= 25:
+        return "Low"
+
+    elif score <= 50:
+        return "Medium"
+
+    elif score <= 75:
+        return "High"
+
+    else:
+        return "Critical"
+
+
+roads["risk_class"] = roads[
+    "disaster_risk_score"
+].apply(classify_risk)
+
+
+# ==========================================
+# 9. DISPLAY RISK RESULTS
+# ==========================================
+
+print("\nSample risk calculations:")
+
+print(
+    roads[
+        [
+            "id",
+            "distance",
+            "traffic",
+            "road_condition",
+            "status",
+            "disaster_risk_score",
+            "risk_class"
+        ]
+    ].head(10)
+)
+
+
+print("\nRisk class distribution:")
+
+print(
+    roads["risk_class"].value_counts()
+)
+
+
+# ==========================================
+# 10. PREPARE ML FEATURES
+# ==========================================
+
+features = [
+    "distance",
+    "travel_time",
+    "traffic_score",
+    "condition_score",
+    "status_score"
+]
+
+X = roads[features]
+
+y = roads["risk_class"]
+
+
+# ==========================================
+# 11. CHECK MISSING VALUES
 # ==========================================
 
 print("\nMissing values:")
 
-print(X.isnull().sum())
+print(
+    X.isnull().sum()
+)
 
-print("\nMissing target values:")
-
-print(y.isnull().sum())
+print(
+    "\nMissing target values:",
+    y.isnull().sum()
+)
 
 
 # ==========================================
-# 8. REMOVE INVALID ROWS
+# 12. REMOVE INVALID ROWS
 # ==========================================
 
 dataset = X.copy()
 
-dataset["risk"] = y
+dataset["risk_class"] = y
 
 dataset = dataset.dropna()
 
-print(
-    "\nFinal ML dataset size:",
-    len(dataset)
-)
-
-
-# ==========================================
-# 9. SPLIT FEATURES AND TARGET
-# ==========================================
 
 X = dataset.drop(
-    "risk",
+    "risk_class",
     axis=1
 )
 
-y = dataset["risk"]
+y = dataset["risk_class"]
 
+
+# ==========================================
+# 13. TRAIN / TEST SPLIT
+# ==========================================
 
 X_train, X_test, y_train, y_test = train_test_split(
+
     X,
     y,
+
     test_size=0.2,
+
     random_state=42,
+
     stratify=y
 )
 
 
-# ==========================================
-# 10. DISPLAY RESULT
-# ==========================================
+print(
+    "\nTraining samples:",
+    len(X_train)
+)
 
-print("\nTraining samples:", len(X_train))
-print("Testing samples:", len(X_test))
-
-print("\nFeature columns:")
-print(X.columns.tolist())
-
-print("\nRisk distribution:")
-print(y.value_counts().sort_index())
-
-print("\nPhase 6.1 preprocessing completed.")
-
-
+print(
+    "Testing samples:",
+    len(X_test)
+)
 
 
 # ==========================================
-# 11. TRAIN RANDOM FOREST MODEL
+# 14. TRAIN RANDOM FOREST
 # ==========================================
 
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report
-
-
-print("\nTraining Random Forest model...")
+print("\nTraining improved Random Forest model...")
 
 
 model = RandomForestClassifier(
-    n_estimators=100,
+
+    n_estimators=150,
+
+    max_depth=10,
+
     random_state=42
+
 )
 
 
@@ -231,14 +310,16 @@ model.fit(
 
 
 # ==========================================
-# 12. MAKE PREDICTIONS
+# 15. PREDICTIONS
 # ==========================================
 
-y_pred = model.predict(X_test)
+y_pred = model.predict(
+    X_test
+)
 
 
 # ==========================================
-# 13. MODEL ACCURACY
+# 16. ACCURACY
 # ==========================================
 
 accuracy = accuracy_score(
@@ -248,14 +329,14 @@ accuracy = accuracy_score(
 
 
 print(
-    "\nModel Accuracy:",
+    "\nImproved Model Accuracy:",
     round(accuracy * 100, 2),
     "%"
 )
 
 
 # ==========================================
-# 14. CLASSIFICATION REPORT
+# 17. CLASSIFICATION REPORT
 # ==========================================
 
 print("\nClassification Report:")
@@ -263,29 +344,95 @@ print("\nClassification Report:")
 print(
     classification_report(
         y_test,
-        y_pred,
-        target_names=[
-            "Low",
-            "Medium",
-            "High"
-        ]
+        y_pred
     )
 )
 
 
 # ==========================================
-# 15. FEATURE IMPORTANCE
+# 18. FEATURE IMPORTANCE
 # ==========================================
 
 print("\nFeature Importance:")
 
 for feature, importance in zip(
+
     X.columns,
+
     model.feature_importances_
+
 ):
+
     print(
         f"{feature}: {importance:.4f}"
     )
 
 
-print("\nPhase 6.2 model training completed.")
+# ==========================================
+# 19. PHASE 6.3 COMPLETE
+# ==========================================
+
+print(
+    "\nPhase 6.3 risk scoring and improved ML model completed."
+)
+
+
+# ==========================================
+# 20. GENERATE RISK PREDICTIONS
+# ==========================================
+
+roads["predicted_risk"] = model.predict(
+    roads[features]
+)
+
+
+
+roads["prediction_confidence"] = (
+    model.predict_proba(
+        roads[features]
+    ).max(axis=1)
+)
+
+
+# ==========================================
+# 21. CREATE OUTPUT DATASET
+# ==========================================
+
+risk_output = roads[
+    [
+        "id",
+        "source",
+        "destination",
+        "predicted_risk",
+        "predicted_risk_score"
+    ]
+].copy()
+
+
+# ==========================================
+# 22. SAVE PREDICTIONS
+# ==========================================
+
+risk_output.to_csv(
+    "data/risk_predictions.csv",
+    index=False
+)
+
+
+print("\nRisk predictions generated.")
+
+print(
+    risk_output.head(10)
+)
+
+print(
+    "\nRisk prediction distribution:"
+)
+
+print(
+    risk_output["predicted_risk"].value_counts()
+)
+
+print(
+    "\nSaved to: data/risk_predictions.csv"
+)
