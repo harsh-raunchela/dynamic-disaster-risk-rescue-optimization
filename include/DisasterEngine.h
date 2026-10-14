@@ -1,5 +1,6 @@
 #ifndef DISASTERX_DISASTER_ENGINE_H
 #define DISASTERX_DISASTER_ENGINE_H
+#include "RiskPredictionLoader.h"
 
 #include "Graph.h"
 #include "EmergencyPriorityQueue.h"
@@ -67,6 +68,8 @@ public:
     );
 
     void runDisasterSimulation();
+
+    bool loadMLRiskPredictions(const string& filename);
 };
 
 #endif

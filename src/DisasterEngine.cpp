@@ -9,6 +9,15 @@ DisasterEngine::DisasterEngine(Graph* graph)
     this->graph = graph;
 }
 
+bool DisasterEngine::loadMLRiskPredictions(
+    const string& filename)
+{
+    return RiskPredictionLoader::load(
+        *graph,
+        filename
+    );
+}
+
 void DisasterEngine::blockRoad(
     const string& source,
     const string& destination)
@@ -283,6 +292,19 @@ void DisasterEngine::runDisasterSimulation()
     cout << "\n====================================\n";
     cout << "     INTEGRATED DISASTER SIMULATION\n";
     cout << "====================================\n";
+
+        cout << "\n[0] Loading ML Disaster Risk\n";
+
+    if (!loadMLRiskPredictions(
+            "data/risk_predictions.csv"))
+    {
+        cout << "Failed to load ML risk predictions."
+             << endl;
+        return;
+    }
+
+    cout << "ML risk predictions integrated successfully."
+         << endl;
 
     if (emergencyQueue.isEmpty())
     {
