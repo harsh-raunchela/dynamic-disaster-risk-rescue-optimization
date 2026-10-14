@@ -427,3 +427,35 @@ bool Graph::updateRoadRisk(
     return false;
 }
 
+// ==================================================
+// GET LOCATION IDs
+// ==================================================
+
+vector<string> Graph::getLocationIds() const
+{
+    vector<string> ids;
+
+    for (const auto& pair : locations)
+    {
+        ids.push_back(pair.first);
+    }
+
+    return ids;
+}
+
+
+// ==================================================
+// GET LOCATION BY ID
+// ==================================================
+
+const Location* Graph::getLocation(const string& locationId) const
+{
+    auto it = locations.find(locationId);
+
+    if (it == locations.end())
+    {
+        return nullptr;
+    }
+
+    return &(it->second);
+}
