@@ -114,6 +114,20 @@ int main()
 
     allPassed = allPassed && finallyEmpty;
 
+    // Test 6: Dequeue from empty queue
+    cout << "\n[TEST 6] Dequeue from empty queue\n";
+
+    Emergency emptyResult = queue.dequeue();
+
+    bool emptyDequeueSafe =
+        queue.isEmpty() && emptyResult.severity == -1;
+
+    cout << "Empty dequeue handled safely: "
+         << (emptyDequeueSafe ? "PASS" : "FAIL") << endl;
+
+    allPassed = allPassed && emptyDequeueSafe;
+
+    // Final result
     cout << "\n=== PHASE 7.2 RESULT: "
          << (allPassed ? "ALL TESTS PASSED" : "SOME TESTS FAILED")
          << " ===\n";
