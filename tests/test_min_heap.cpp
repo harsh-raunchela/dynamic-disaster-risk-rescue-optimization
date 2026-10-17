@@ -134,6 +134,27 @@ int main()
 
     allPassed = allPassed && capacityCorrect;
 
+    // Test 6: Capacity overflow preserves existing resources
+    cout << "\n[TEST 6] Capacity overflow preservation\n";
+
+    MinHeap overflowHeap(2);
+
+    overflowHeap.insert(createResource("A", 2));
+    overflowHeap.insert(createResource("B", 1));
+    overflowHeap.insert(createResource("C", 0));
+
+    bool overflowCorrect =
+        overflowHeap.peek().id == "B" &&
+        overflowHeap.extractMin().id == "B" &&
+        overflowHeap.extractMin().id == "A" &&
+        overflowHeap.isEmpty();
+
+    cout << "Existing resources preserved after overflow: "
+         << (overflowCorrect ? "PASS" : "FAIL") << endl;
+
+    allPassed = allPassed && overflowCorrect;
+
+    // Final result
     cout << "\n=== PHASE 7.3 RESULT: "
          << (allPassed ? "ALL TESTS PASSED" : "SOME TESTS FAILED")
          << " ===\n";
