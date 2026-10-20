@@ -211,6 +211,10 @@ void Graph::updateRoad(
 
 bool Graph::loadLocations(const string& filename)
 {
+    // Reset the graph before loading a fresh dataset.
+    locations.clear();
+    adjacencyList.clear();
+
     ifstream file(filename);
 
     if (!file.is_open())

@@ -18,6 +18,12 @@ public:
         const string& destination
     );
 
+    static vector<string> findAStarRoute(
+        const Graph& graph,
+        const string& source,
+        const string& destination
+    );
+
     static double getRouteCost(
         const Graph& graph,
         const vector<string>& route
