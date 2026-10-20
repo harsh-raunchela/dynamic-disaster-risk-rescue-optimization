@@ -1,0 +1,14 @@
+# Build directories
+/build/
+/bin/
+/out/
+
+# Compiled Executables
+*.exe
+*.dll
+*.obj
+*.lib
+
+# Accidental root artifacts
+ForEach-Object
+g++
