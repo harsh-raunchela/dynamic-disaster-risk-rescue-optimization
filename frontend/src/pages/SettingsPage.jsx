@@ -1,0 +1,7 @@
+import { Cable, Database, ServerCog, Terminal } from 'lucide-react';
+import { useNetwork } from '../context/NetworkContext';
+
+export function SettingsPage() {
+  const { health } = useNetwork();
+  return <div className="settings-page"><section className="page-intro"><p className="eyebrow">LOCAL INTEGRATION</p><h2>System settings</h2><p>Configuration is intentionally read-only in this phase. The dashboard reflects the local backend and C++ worker currently running on this machine.</p></section><section className="settings-grid"><article className="panel"><ServerCog size={23} /><p className="eyebrow">BACKEND STATUS</p><h2>{health?.ready ? 'Connected' : 'Unavailable'}</h2><p>Express API proxies validated requests to one persistent C++ JSONL worker.</p></article><article className="panel"><Database size={23} /><p className="eyebrow">DATASET</p><h2>{health?.locationCount || 0} locations / {health?.roadCount || 0} roads</h2><p>CSV data is loaded by the worker at startup. No database is used.</p></article><article className="panel"><Cable size={23} /><p className="eyebrow">ROUTE POLICY</p><h2>Restricted penalty: {health?.restrictedRoadPenalty ?? '—'}</h2><p>Closed roads are excluded; restricted roads remain routable with the configured penalty.</p></article><article className="panel"><Terminal size={23} /><p className="eyebrow">NEXT PHASE</p><h2>Frontend foundation complete</h2><p>Emergency, resource, and simulation lifecycle controls are intentionally not exposed yet.</p></article></section></div>;
+}

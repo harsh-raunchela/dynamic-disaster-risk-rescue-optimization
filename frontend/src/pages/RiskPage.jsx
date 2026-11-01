@@ -1,0 +1,13 @@
+import { BrainCircuit, ChevronDown, Gauge, TriangleAlert } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { useNetwork } from '../context/NetworkContext';
+import { formatNumber, riskColors } from '../utils/network';
+
+export function RiskPage() {
+  const { risks, roads } = useNetwork(); const [expanded, setExpanded] = useState(false);
+  const counts = useMemo(() => ['Low', 'Medium', 'High', 'Critical'].map((risk) => [risk, risks.filter((item) => item.risk === risk).length]), [risks]);
+  const highRisks = risks.filter((item) => ['High', 'Critical'].includes(item.risk));
+  const averageConfidence = risks.length ? (risks.reduce((sum, item) => sum + (item.predictionConfidence || 0), 0) / risks.length) * 100 : 0;
+  const currentRisk = new Map(roads.map((road) => [road.id, road.risk]));
+  return <div className="risk-page"><section className="page-intro"><p className="eyebrow">ML PREDICTION OUTPUT</p><h2>Risk analytics</h2><p>Prediction confidence comes from the CSV pipeline. The risk category shown here is the current category held by the C++ graph.</p></section><section className="risk-stat-grid"><article><BrainCircuit size={21} /><strong>{formatNumber(risks.length)}</strong><span>Predicted roads</span></article><article><TriangleAlert size={21} /><strong>{formatNumber(highRisks.length)}</strong><span>High / critical roads</span></article><article><Gauge size={21} /><strong>{averageConfidence.toFixed(1)}%</strong><span>Mean prediction confidence</span></article></section><section className="panel risk-matrix"><div className="panel-heading"><div><p className="eyebrow">CLASS DISTRIBUTION</p><h2>Current graph risk</h2></div></div><div className="matrix-grid">{counts.map(([risk, count]) => <article key={risk} style={{ '--risk-color': riskColors[risk] }}><i /><span>{risk}</span><strong>{formatNumber(count)}</strong></article>)}</div></section><section className="panel risk-table-panel"><div className="panel-heading"><div><p className="eyebrow">PRIORITY REVIEW</p><h2>High-risk road segments</h2></div><button className="text-button" onClick={() => setExpanded((value) => !value)}><ChevronDown size={16} />{expanded ? 'Show fewer' : 'Show all'}</button></div><div className="priority-list">{highRisks.slice(0, expanded ? 100 : 10).map((risk) => <div key={risk.roadId}><i style={{ background: riskColors[currentRisk.get(risk.roadId)] }} /><span><strong>{risk.roadId}</strong><small>{risk.source} → {risk.destination}</small></span><b>{risk.predictionConfidence === null ? '—' : `${(risk.predictionConfidence * 100).toFixed(1)}%`}</b></div>)}</div></section></div>;
+}
