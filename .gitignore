@@ -12,3 +12,8 @@
 # Accidental root artifacts
 ForEach-Object
 g++
+
+# Node.js backend dependencies and local configuration
+backend/node_modules/
+backend/.env
+backend/coverage/

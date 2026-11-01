@@ -131,12 +131,18 @@ void Graph::blockRoad(
     const string& destination
 )
 {
-    for (Edge& edge : adjacencyList[source])
+    auto it = adjacencyList.find(source);
+
+    if (it == adjacencyList.end())
+    {
+        return;
+    }
+
+    for (Edge& edge : it->second)
     {
         if (edge.destination == destination)
         {
             edge.status = "Closed";
-            return;
         }
     }
 }
@@ -151,14 +157,54 @@ void Graph::unblockRoad(
     const string& destination
 )
 {
-    for (Edge& edge : adjacencyList[source])
+    auto it = adjacencyList.find(source);
+
+    if (it == adjacencyList.end())
+    {
+        return;
+    }
+
+    for (Edge& edge : it->second)
     {
         if (edge.destination == destination)
         {
             edge.status = "Open";
-            return;
         }
     }
+}
+
+bool Graph::blockRoadById(const string& roadId)
+{
+    for (auto& pair : adjacencyList)
+    {
+        for (Edge& edge : pair.second)
+        {
+            if (edge.id == roadId)
+            {
+                edge.status = "Closed";
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool Graph::unblockRoadById(const string& roadId)
+{
+    for (auto& pair : adjacencyList)
+    {
+        for (Edge& edge : pair.second)
+        {
+            if (edge.id == roadId)
+            {
+                edge.status = "Open";
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 
@@ -347,6 +393,7 @@ bool Graph::loadRoads(const string& filename)
 
         Edge road;
 
+        road.id = roadId;
         road.destination = destination;
 
         road.distance = stod(distance);
@@ -425,6 +472,25 @@ bool Graph::updateRoadRisk(
             edge.risk = risk;
 
             return true;
+        }
+    }
+
+    return false;
+}
+
+bool Graph::updateRoadRiskById(
+    const string& roadId,
+    const string& risk)
+{
+    for (auto& pair : adjacencyList)
+    {
+        for (Edge& edge : pair.second)
+        {
+            if (edge.id == roadId)
+            {
+                edge.risk = risk;
+                return true;
+            }
         }
     }
 

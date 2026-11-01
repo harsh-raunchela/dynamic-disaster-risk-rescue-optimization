@@ -8,6 +8,19 @@
 
 using namespace std;
 
+struct RouteSegmentCost
+{
+    string roadId;
+    string source;
+    string destination;
+    double travelTime;
+    double riskPenalty;
+    double trafficPenalty;
+    double roadConditionPenalty;
+    double statusPenalty;
+    double totalCost;
+};
+
 class RouteDecisionEngine
 {
 public:
@@ -28,6 +41,18 @@ public:
         const Graph& graph,
         const vector<string>& route
     );
+
+    // Returns the same lowest-cost usable edge selected for each route
+    // segment, without printing CLI output.
+    static bool getRouteCostBreakdown(
+        const Graph& graph,
+        const vector<string>& route,
+        vector<RouteSegmentCost>& segments,
+        double& totalCost
+    );
+
+    static void setRestrictedRoadPenalty(double penalty);
+    static double getRestrictedRoadPenalty();
 
     static vector<string> reroute(
         const Graph& graph,

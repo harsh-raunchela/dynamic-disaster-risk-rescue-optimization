@@ -238,7 +238,10 @@ void resourceMenu(DisasterEngine& engine, bool datasetLoaded)
 // ROUTE PLANNING
 // --------------------------------------------------
 
-void routeMenu(DisasterEngine& engine, bool datasetLoaded)
+void routeMenu(
+    DisasterEngine& engine,
+    bool datasetLoaded,
+    bool& mlLoaded)
 {
     if (!datasetLoaded)
     {
@@ -261,6 +264,26 @@ void routeMenu(DisasterEngine& engine, bool datasetLoaded)
         {
             case 1:
             {
+                // Ensure ML risk predictions are loaded first.
+                if (!mlLoaded)
+                {
+                    cout << "\nML risk predictions are not loaded.\n";
+                    cout << "Loading ML risk predictions...\n";
+
+                    mlLoaded = engine.loadMLRiskPredictions(
+                        "data/risk_predictions.csv"
+                    );
+
+                    if (!mlLoaded)
+                    {
+                        cout << "ERROR: Could not load ML risk predictions.\n";
+                        cout << "Route planning cancelled.\n";
+                        break;
+                    }
+
+                    cout << "ML risk predictions loaded successfully.\n";
+                }
+
                 string source =
                     readText("Source location ID: ");
 
@@ -523,7 +546,7 @@ int main()
                 break;
 
             case 5:
-                routeMenu(engine, datasetLoaded);
+                routeMenu(engine, datasetLoaded, mlLoaded);
                 break;
 
             case 6:

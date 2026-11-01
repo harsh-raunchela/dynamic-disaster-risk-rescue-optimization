@@ -50,6 +50,11 @@ public:
         const string& destination
     );
 
+    // Changes one road only. Endpoint-based operations above remain
+    // available for the interactive CLI.
+    bool blockRoadById(const string& roadId);
+    bool unblockRoadById(const string& roadId);
+
     vector<Edge> getNeighbors(
         const string& locationId
     ) const;
@@ -57,6 +62,11 @@ public:
     bool updateRoadRisk(
         const string& source,
         const string& destination,
+        const string& risk
+    );
+
+    bool updateRoadRiskById(
+        const string& roadId,
         const string& risk
     );
 

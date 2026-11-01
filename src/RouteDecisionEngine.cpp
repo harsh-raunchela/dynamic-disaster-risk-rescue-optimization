@@ -5,10 +5,92 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <limits>
+#include <cmath>
 
 #include "RouteDecisionEngine.h"
 
 using namespace std;
+
+
+namespace
+{
+    double restrictedRoadPenalty = 40.0;
+
+    bool calculateEdgeCostComponents(
+        const Edge& road,
+        double& travelTime,
+        double& riskPenalty,
+        double& trafficPenalty,
+        double& roadConditionPenalty,
+        double& statusPenalty)
+    {
+        if (road.status == "Closed" ||
+            road.travelTime < 0.0 ||
+            !std::isfinite(road.travelTime))
+        {
+            return false;
+        }
+
+        travelTime = road.travelTime;
+        riskPenalty = 0.0;
+        trafficPenalty = 0.0;
+        roadConditionPenalty = 0.0;
+        statusPenalty = road.status == "Restricted"
+            ? restrictedRoadPenalty : 0.0;
+
+        if (road.risk == "Medium")
+            riskPenalty = 10.0;
+        else if (road.risk == "High")
+            riskPenalty = 25.0;
+        else if (road.risk == "Critical")
+            riskPenalty = 50.0;
+
+        if (road.traffic == "Medium")
+            trafficPenalty = 5.0;
+        else if (road.traffic == "High")
+            trafficPenalty = 15.0;
+
+        if (road.roadCondition == "Damaged")
+            roadConditionPenalty = 15.0;
+        else if (road.roadCondition == "Severely Damaged")
+            roadConditionPenalty = 30.0;
+
+        return true;
+    }
+
+    double calculateEdgeCost(const Edge& road)
+    {
+        double travelTime = 0.0;
+        double riskPenalty = 0.0;
+        double trafficPenalty = 0.0;
+        double roadConditionPenalty = 0.0;
+        double statusPenalty = 0.0;
+
+        if (!calculateEdgeCostComponents(
+                road, travelTime, riskPenalty, trafficPenalty,
+                roadConditionPenalty, statusPenalty))
+        {
+            return std::numeric_limits<double>::infinity();
+        }
+
+        return travelTime + riskPenalty + trafficPenalty +
+               roadConditionPenalty + statusPenalty;
+    }
+}
+
+void RouteDecisionEngine::setRestrictedRoadPenalty(double penalty)
+{
+    if (std::isfinite(penalty) && penalty >= 0.0)
+    {
+        restrictedRoadPenalty = penalty;
+    }
+}
+
+double RouteDecisionEngine::getRestrictedRoadPenalty()
+{
+    return restrictedRoadPenalty;
+}
 
 
 // ============================================================
@@ -63,14 +145,14 @@ vector<string> RouteDecisionEngine::findBestRoute(
 
         for (const Edge& road : roads)
         {
-            // Ignore closed roads and negative travel times.
-            if (road.status == "Closed" ||
-                road.travelTime < 0.0)
+            double edgeCost = calculateEdgeCost(road);
+
+            if (!std::isfinite(edgeCost))
             {
                 continue;
             }
 
-            double newCost = currentCost + road.travelTime;
+            double newCost = currentCost + edgeCost;
 
             auto it = cost.find(road.destination);
 
@@ -139,23 +221,37 @@ vector<string> RouteDecisionEngine::findAStarRoute(
         greater<pair<double, string>>
     > openSet;
 
+    // Admissible heuristic: zero.
+    // This guarantees optimality with nonnegative edge costs.
+    auto heuristic = [](
+        const string& current,
+        const string& destination) -> double
+    {
+        (void)current;
+        (void)destination;
+        return 0.0;
+    };
+
     gScore[source] = 0.0;
-    openSet.push({0.0, source});
+
+    openSet.push({
+        heuristic(source, destination),
+        source
+    });
 
     while (!openSet.empty())
     {
-        double currentScore = openSet.top().first;
         string current = openSet.top().second;
         openSet.pop();
 
-        // Ignore outdated entries.
         auto currentIt = gScore.find(current);
 
-        if (currentIt == gScore.end() ||
-            currentScore > currentIt->second)
+        if (currentIt == gScore.end())
         {
             continue;
         }
+
+        double currentGScore = currentIt->second;
 
         if (current == destination)
         {
@@ -166,26 +262,30 @@ vector<string> RouteDecisionEngine::findAStarRoute(
 
         for (const Edge& road : roads)
         {
-            if (road.status == "Closed" ||
-                road.travelTime < 0.0)
+            double edgeCost = calculateEdgeCost(road);
+
+            if (!std::isfinite(edgeCost))
             {
                 continue;
             }
 
-            double tentativeScore =
-                currentScore + road.travelTime;
+            double tentativeGScore =
+                currentGScore + edgeCost;
 
             auto it = gScore.find(road.destination);
 
             if (it == gScore.end() ||
-                tentativeScore < it->second)
+                tentativeGScore < it->second)
             {
-                gScore[road.destination] = tentativeScore;
+                gScore[road.destination] = tentativeGScore;
                 parent[road.destination] = current;
 
-                // Zero heuristic: f(n) = g(n).
+                double fScore =
+                    tentativeGScore +
+                    heuristic(road.destination, destination);
+
                 openSet.push({
-                    tentativeScore,
+                    fScore,
                     road.destination
                 });
             }
@@ -241,48 +341,125 @@ double RouteDecisionEngine::getRouteCost(
 
     for (size_t i = 0; i + 1 < route.size(); i++)
     {
-        string source = route[i];
-        string destination = route[i + 1];
+        const string& source = route[i];
+        const string& destination = route[i + 1];
 
         vector<Edge> roads = graph.getNeighbors(source);
+
         bool roadFound = false;
+        double bestEdgeCost =
+            numeric_limits<double>::infinity();
 
         for (const Edge& road : roads)
         {
-            if (road.destination == destination)
+            if (road.destination != destination)
             {
+                continue;
+            }
+
+            double edgeCost = calculateEdgeCost(road);
+
+            if (!isfinite(edgeCost))
+            {
+                continue;
+            }
+
+            if (edgeCost < bestEdgeCost)
+            {
+                bestEdgeCost = edgeCost;
                 roadFound = true;
-
-                cout << "Checking: " << source
-                     << " -> " << destination
-                     << " | Status: " << road.status
-                     << " | Travel time: " << road.travelTime
-                     << endl;
-
-                if (road.status == "Closed" ||
-                    road.travelTime < 0.0)
-                {
-                    cout << "ERROR: Road is closed or "
-                         << "travel time is negative.\n";
-                    return -1.0;
-                }
-
-                totalCost += road.travelTime;
-                break;
             }
         }
 
         if (!roadFound)
         {
-            cout << "ERROR: Road not found: "
-                 << source << " -> " << destination
-                 << endl;
+            cout << "ERROR: No usable road found: "
+                 << source << " -> "
+                 << destination << endl;
 
             return -1.0;
         }
+
+        cout << "Checking: " << source
+             << " -> " << destination
+             << " | Selected edge cost: "
+             << bestEdgeCost << endl;
+
+        totalCost += bestEdgeCost;
     }
 
     return totalCost;
+}
+
+bool RouteDecisionEngine::getRouteCostBreakdown(
+    const Graph& graph,
+    const vector<string>& route,
+    vector<RouteSegmentCost>& segments,
+    double& totalCost)
+{
+    segments.clear();
+    totalCost = 0.0;
+
+    if (route.empty())
+    {
+        return false;
+    }
+
+    for (size_t i = 0; i + 1 < route.size(); ++i)
+    {
+        const string& source = route[i];
+        const string& destination = route[i + 1];
+        vector<Edge> roads = graph.getNeighbors(source);
+
+        bool found = false;
+        RouteSegmentCost selected{};
+
+        for (const Edge& road : roads)
+        {
+            if (road.destination != destination)
+            {
+                continue;
+            }
+
+            RouteSegmentCost candidate{};
+            candidate.roadId = road.id;
+            candidate.source = source;
+            candidate.destination = destination;
+
+            if (!calculateEdgeCostComponents(
+                    road,
+                    candidate.travelTime,
+                    candidate.riskPenalty,
+                    candidate.trafficPenalty,
+                    candidate.roadConditionPenalty,
+                    candidate.statusPenalty))
+            {
+                continue;
+            }
+
+            candidate.totalCost = candidate.travelTime +
+                candidate.riskPenalty + candidate.trafficPenalty +
+                candidate.roadConditionPenalty + candidate.statusPenalty;
+
+            if (!found || candidate.totalCost < selected.totalCost)
+            {
+                selected = candidate;
+                found = true;
+            }
+        }
+
+        if (!found)
+        {
+            segments.clear();
+            totalCost = 0.0;
+            return false;
+        }
+
+        totalCost += selected.totalCost;
+        segments.push_back(selected);
+    }
+
+    return true;
 }
 
 
@@ -299,7 +476,6 @@ vector<string> RouteDecisionEngine::reroute(
 {
     cout << "\nChecking current route...\n";
 
-    // Validate route endpoints.
     bool routeBlocked =
         currentRoute.empty() ||
         currentRoute.front() != source ||
@@ -309,37 +485,30 @@ vector<string> RouteDecisionEngine::reroute(
          !routeBlocked && i + 1 < currentRoute.size();
          i++)
     {
-        string current = currentRoute[i];
-        string next = currentRoute[i + 1];
+        const string& current = currentRoute[i];
+        const string& next = currentRoute[i + 1];
 
         vector<Edge> roads = graph.getNeighbors(current);
-        bool roadExists = false;
+
+        bool usableRoadFound = false;
 
         for (const Edge& road : roads)
         {
-            if (road.destination == next)
+            if (road.destination == next &&
+                road.status != "Closed" &&
+                road.travelTime >= 0.0 &&
+                isfinite(road.travelTime))
             {
-                roadExists = true;
-
-                if (road.status == "Closed" ||
-                    road.travelTime < 0.0)
-                {
-                    routeBlocked = true;
-
-                    cout << "Unavailable road: "
-                         << current << " -> " << next
-                         << endl;
-                }
-
+                usableRoadFound = true;
                 break;
             }
         }
 
-        if (!roadExists)
+        if (!usableRoadFound)
         {
             routeBlocked = true;
 
-            cout << "Road no longer available: "
+            cout << "No usable road remains: "
                  << current << " -> " << next
                  << endl;
         }

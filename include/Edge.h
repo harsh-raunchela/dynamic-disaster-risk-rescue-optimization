@@ -17,6 +17,9 @@ struct Edge
     string roadCondition;
 
     string status;
+
+    // Unique identifier from roads.csv
+    string id;
 };
 
 #endif
