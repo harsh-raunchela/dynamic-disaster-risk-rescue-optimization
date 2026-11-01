@@ -9,9 +9,9 @@ export const riskColors = {
 };
 
 export const statusColors = {
-  Open: '#9ee76c',
-  Restricted: '#f1b738',
-  Closed: '#e14949'
+  Open: '#4a8c78',
+  Restricted: '#d99a1d',
+  Closed: '#d9554f'
 };
 
 export function formatNumber(value) {
