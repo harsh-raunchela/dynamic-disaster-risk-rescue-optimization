@@ -25,7 +25,9 @@ namespace
         {
             const std::string argument = argv[index];
 
-            if (argument == "--locations" && index + 1 < argc)
+            if (argument == "--data-dir" && index + 1 < argc)
+                config.setDataDir(argv[++index]);
+            else if (argument == "--locations" && index + 1 < argc)
                 config.locationsFile = argv[++index];
             else if (argument == "--roads" && index + 1 < argc)
                 config.roadsFile = argv[++index];
@@ -54,6 +56,7 @@ int main(int argc, char* argv[])
     if (!readArguments(argc, argv, config))
     {
         std::cerr << "Usage: disaster_jsonl_worker.exe "
+                  << "[--data-dir DIR] "
                   << "[--locations FILE] [--roads FILE] [--risks FILE] "
                   << "[--restricted-road-penalty NUMBER]" << std::endl;
         return 2;

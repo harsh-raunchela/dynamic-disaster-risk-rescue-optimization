@@ -296,7 +296,7 @@ void DisasterEngine::runDisasterSimulation()
         cout << "\n[0] Loading ML Disaster Risk\n";
 
     if (!loadMLRiskPredictions(
-            "data/risk_predictions.csv"))
+            "data/real/risk_predictions.csv"))
     {
         cout << "Failed to load ML risk predictions."
              << endl;

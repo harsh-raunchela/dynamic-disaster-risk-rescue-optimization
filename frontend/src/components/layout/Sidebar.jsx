@@ -1,10 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { Activity, ChartNoAxesCombined, ChevronLeft, Command, Map, Network, Route, Settings, X } from 'lucide-react';
+import { Activity, ChartNoAxesCombined, ChevronLeft, Command, Map, Network, Route, Settings, Siren, Truck, X } from 'lucide-react';
 import { useNetwork } from '../../context/NetworkContext';
 
 const links = [
   ['/', 'Command Center', Command],
   ['/map', 'Live Map', Map],
+  ['/emergencies', 'Emergency Control', Siren],
+  ['/resources', 'Resource Management', Truck],
   ['/routes', 'Route Planner', Route],
   ['/network', 'Network Monitoring', Network],
   ['/risks', 'Risk Analytics', ChartNoAxesCombined],

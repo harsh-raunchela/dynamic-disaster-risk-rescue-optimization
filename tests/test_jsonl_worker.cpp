@@ -58,9 +58,9 @@ int main()
 
     check(response.value("ok", false) &&
           response["result"].value("ready", false) &&
-          response["result"].value("locationCount", 0) == 500 &&
-          response["result"].value("roadCount", 0) == 2500 &&
-          response["result"].value("riskPredictionCount", 0) == 2500,
+          response["result"].value("locationCount", 0) == 1086 &&
+          response["result"].value("roadCount", 0) == 2362 &&
+          response["result"].value("riskPredictionCount", 0) == 2362,
           "Health response reports loaded graph and prediction counts");
 
     response = call(adapter, {
@@ -70,7 +70,7 @@ int main()
 
     check(response.value("ok", false) &&
           response["result"]["locations"].is_array() &&
-          response["result"]["locations"].size() == 500 &&
+          response["result"]["locations"].size() == 1086 &&
           response["result"]["locations"][0].contains("latitude"),
           "Location snapshot returns all mapped location fields");
 
@@ -81,7 +81,7 @@ int main()
 
     check(response.value("ok", false) &&
           response["result"]["roads"].is_array() &&
-          response["result"]["roads"].size() == 2500 &&
+          response["result"]["roads"].size() == 2362 &&
           response["result"]["roads"][0].contains("roadCondition"),
           "Road snapshot returns all mapped road fields");
 

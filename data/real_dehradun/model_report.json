@@ -1,0 +1,30 @@
+{
+  "metrics": {
+    "spatial_holdout_accuracy": 0.762,
+    "spatial_holdout_macro_f1": 0.7595,
+    "majority_class_baseline": 0.4463,
+    "train_roads": 1757,
+    "test_roads": 605
+  },
+  "feature_importance": {
+    "slope_pct": 0.2167,
+    "rain_p95": 0.1427,
+    "elev_mean": 0.1157,
+    "rain_heavy_days": 0.0871,
+    "elev_gain": 0.0862,
+    "landslide_dist_km": 0.0791,
+    "landslides_5km": 0.0676,
+    "rain_max": 0.0666,
+    "soil_mean": 0.0595,
+    "distance": 0.046,
+    "sinuosity": 0.0226,
+    "class_rank": 0.0062,
+    "soil_max": 0.0041
+  },
+  "risk_distribution": {
+    "Low": 945,
+    "Medium": 826,
+    "High": 425,
+    "Critical": 166
+  }
+}

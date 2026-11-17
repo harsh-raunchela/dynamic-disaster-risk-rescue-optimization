@@ -1,0 +1,9 @@
+DisasterX dataset - generated 2026-11-05  bbox(W,S,E,N)=(77.95, 29.9, 78.35, 30.5)
+REAL      : road network, hospitals/fire stations/police/shelters/villages (OpenStreetMap contributors, ODbL)
+REAL      : elevation -> slope (Open-Meteo / Copernicus DEM), rainfall + soil moisture (Open-Meteo ERA5 reanalysis)
+REAL      : landslide history (NASA Global Landslide Catalog) - events found near area: 94
+ESTIMATED : traffic (from road class; no live feed), road condition (OSM surface tag, else road class)
+ESTIMATED : risk labels = hazard INDEX (0.35 slope + 0.25 rainfall + 0.15 soil moisture + 0.25 landslide history);
+            no public per-road ground truth exists. The Random Forest learns/generalises this index from terrain features.
+SIMULATED : emergencies and resource availability (no real incident feed exists)
+ML report : {"spatial_holdout_accuracy": 0.762, "spatial_holdout_macro_f1": 0.7595, "majority_class_baseline": 0.4463, "train_roads": 1757, "test_roads": 605}

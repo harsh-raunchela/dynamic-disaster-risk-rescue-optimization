@@ -8,10 +8,19 @@
 
 struct JsonlWorkerConfig
 {
-    std::string locationsFile = "data/locations.csv";
-    std::string roadsFile = "data/roads.csv";
-    std::string riskPredictionsFile = "data/risk_predictions.csv";
+    std::string dataDir = "data/real";
+    std::string locationsFile = "data/real/locations.csv";
+    std::string roadsFile = "data/real/roads.csv";
+    std::string riskPredictionsFile = "data/real/risk_predictions.csv";
     double restrictedRoadPenalty = 40.0;
+
+    void setDataDir(const std::string& dir)
+    {
+        dataDir = dir;
+        locationsFile = dir + "/locations.csv";
+        roadsFile = dir + "/roads.csv";
+        riskPredictionsFile = dir + "/risk_predictions.csv";
+    }
 };
 
 // Keeps JSON protocol concerns outside the graph and routing classes.

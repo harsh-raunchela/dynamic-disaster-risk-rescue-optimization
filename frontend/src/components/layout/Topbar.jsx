@@ -5,7 +5,7 @@ import { IconButton } from '../common/IconButton';
 
 const titles = {
   '/': ['Command Center', 'System overview'],
-  '/map': ['Live Map', 'Synthetic road network'],
+  '/map': ['Live Map', 'Real Dehradun road network'],
   '/routes': ['Route Planner', 'C++ risk-aware routing'],
   '/network': ['Network Monitoring', 'Road state operations'],
   '/risks': ['Risk Analytics', 'ML prediction output'],
@@ -24,7 +24,7 @@ export function Topbar({ onOpenMobile }) {
         <div><p className="eyebrow">{subtitle}</p><h1>{title}</h1></div>
       </div>
       <div className="topbar-actions">
-        <div className="synthetic-pill">SIMULATED NETWORK</div>
+        <div className="synthetic-pill">REAL ROADS · SIMULATED OPS</div>
         <div className={`connection-status ${connected ? 'connection-live' : 'connection-down'}`} title={connected ? 'Backend and worker connected' : 'Backend unavailable'}>
           {connected ? <Wifi size={15} /> : <WifiOff size={15} />}<span>{connected ? 'Connected' : 'Offline'}</span>
         </div>

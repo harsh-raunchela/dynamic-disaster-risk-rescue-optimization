@@ -1,0 +1,135 @@
+[
+  {
+    "resourceId": "RES-0001",
+    "name": "Rapid Response Ambulance Alpha",
+    "type": "Ambulance",
+    "locationId": "LOC_0001",
+    "capacity": 4,
+    "capabilities": [
+      "Trauma Care",
+      "Advanced Life Support",
+      "Patient Transport"
+    ],
+    "status": "Available",
+    "contact": {
+      "name": "Captain Miller",
+      "phone": "555-0192",
+      "radioChannel": "TAC-1"
+    },
+    "createdAt": "2026-11-05T06:00:00.000Z",
+    "updatedAt": "2026-11-05T06:00:00.000Z"
+  },
+  {
+    "resourceId": "RES-0002",
+    "name": "Urban Search & Rescue Team 1",
+    "type": "Rescue Team",
+    "locationId": "LOC_0010",
+    "capacity": 8,
+    "capabilities": [
+      "Structural Collapse Extrication",
+      "Rope Rescue",
+      "Canine Search"
+    ],
+    "status": "Available",
+    "contact": {
+      "name": "Lieutenant Gomez",
+      "phone": "555-0244",
+      "radioChannel": "RESCUE-4"
+    },
+    "createdAt": "2026-11-05T06:15:00.000Z",
+    "updatedAt": "2026-11-05T06:15:00.000Z"
+  },
+  {
+    "resourceId": "RES-0003",
+    "name": "Heavy Pumper Fire Engine 7",
+    "type": "Fire Unit",
+    "locationId": "LOC_0054",
+    "capacity": 6,
+    "capabilities": [
+      "Structural Fire Suppression",
+      "Foam Injection",
+      "Hazmat Containment"
+    ],
+    "status": "Available",
+    "contact": {
+      "name": "Chief Davis",
+      "phone": "555-0381",
+      "radioChannel": "FIRE-CMD"
+    },
+    "createdAt": "2026-11-05T06:30:00.000Z",
+    "updatedAt": "2026-11-05T06:30:00.000Z"
+  },
+  {
+    "resourceId": "RES-0004",
+    "name": "Mobile Disaster Relief Depot A",
+    "type": "Relief Unit",
+    "locationId": "LOC_0085",
+    "capacity": 50,
+    "capabilities": [
+      "Water Purification",
+      "Emergency Ration Distribution",
+      "Blanket Logistics"
+    ],
+    "status": "Available",
+    "contact": {
+      "name": "Director Harris",
+      "phone": "555-0422",
+      "radioChannel": "LOG-2"
+    },
+    "createdAt": "2026-11-05T06:45:00.000Z",
+    "updatedAt": "2026-11-05T06:45:00.000Z"
+  },
+  {
+    "resourceId": "RES-0005",
+    "name": "Medic Unit Delta",
+    "type": "Ambulance",
+    "locationId": "LOC_0091",
+    "capacity": 2,
+    "capabilities": [
+      "Basic Life Support"
+    ],
+    "status": "Maintenance",
+    "contact": {
+      "name": "Dispatch Office",
+      "phone": "555-0500",
+      "radioChannel": "TAC-9"
+    },
+    "createdAt": "2026-11-05T07:00:00.000Z",
+    "updatedAt": "2026-11-05T07:00:00.000Z"
+  },
+  {
+    "resourceId": "RES-0006",
+    "name": "Test Ambulance Alpha",
+    "type": "Ambulance",
+    "locationId": "LOC_0001",
+    "capacity": 4,
+    "capabilities": [
+      "Trauma Care",
+      "Patient Transport"
+    ],
+    "status": "Available",
+    "contact": {
+      "name": "Test Operator",
+      "phone": "9999999999",
+      "radioChannel": "TEST-1"
+    },
+    "createdAt": "2026-11-05T11:26:57.250Z",
+    "updatedAt": "2026-11-05T11:26:57.250Z"
+  },
+  {
+    "resourceId": "RES-0007",
+    "name": "ambulance unit - 1",
+    "type": "Ambulance",
+    "locationId": "LOC_0010",
+    "capacity": 20,
+    "capabilities": [],
+    "status": "Available",
+    "contact": {
+      "name": "harsh",
+      "phone": "8439299654",
+      "radioChannel": "ch-7"
+    },
+    "createdAt": "2026-11-10T08:03:34.099Z",
+    "updatedAt": "2026-11-10T08:03:34.099Z"
+  }
+]

@@ -241,7 +241,8 @@ void resourceMenu(DisasterEngine& engine, bool datasetLoaded)
 void routeMenu(
     DisasterEngine& engine,
     bool datasetLoaded,
-    bool& mlLoaded)
+    bool& mlLoaded,
+    const string& dataDir = "data/real")
 {
     if (!datasetLoaded)
     {
@@ -271,7 +272,7 @@ void routeMenu(
                     cout << "Loading ML risk predictions...\n";
 
                     mlLoaded = engine.loadMLRiskPredictions(
-                        "data/risk_predictions.csv"
+                        dataDir + "/risk_predictions.csv"
                     );
 
                     if (!mlLoaded)
@@ -457,9 +458,31 @@ void displayAlgorithmInformation()
 // MAIN
 // --------------------------------------------------
 
-int main()
+int main(int argc, char* argv[])
 {
     displayBanner();
+
+    string dataDir = "data/real";
+    const char* envDir = std::getenv("DISASTERX_DATA_DIR");
+    if (envDir && *envDir)
+    {
+        dataDir = envDir;
+    }
+
+    for (int i = 1; i < argc; ++i)
+    {
+        string arg = argv[i];
+        if (arg == "--data-dir" && i + 1 < argc)
+        {
+            dataDir = argv[++i];
+        }
+        else if (arg.rfind("--data-dir=", 0) == 0)
+        {
+            dataDir = arg.substr(11);
+        }
+    }
+
+    cout << "Active dataset directory: " << dataDir << "\n";
 
     Graph graph;
     DisasterEngine engine(&graph);
@@ -480,17 +503,17 @@ int main()
         {
             case 1:
             {
-                cout << "\nLoading disaster dataset...\n";
+                cout << "\nLoading disaster dataset from " << dataDir << "...\n";
 
                 bool locationsLoaded =
-                    graph.loadLocations("data/locations.csv");
+                    graph.loadLocations(dataDir + "/locations.csv");
 
                 bool roadsLoaded = false;
 
                 if (locationsLoaded)
                 {
                     roadsLoaded =
-                        graph.loadRoads("data/roads.csv");
+                        graph.loadRoads(dataDir + "/roads.csv");
                 }
 
                 datasetLoaded =
@@ -509,8 +532,8 @@ int main()
                 else
                 {
                     cout << "\nDataset loading failed.\n";
-                    cout << "Check data/locations.csv and "
-                         << "data/roads.csv.\n";
+                    cout << "Check " << dataDir << "/locations.csv and "
+                         << dataDir << "/roads.csv.\n";
                 }
 
                 break;
@@ -524,10 +547,10 @@ int main()
                     break;
                 }
 
-                cout << "\nLoading ML risk predictions...\n";
+                cout << "\nLoading ML risk predictions from " << dataDir << "...\n";
 
                 mlLoaded = engine.loadMLRiskPredictions(
-                    "data/risk_predictions.csv");
+                    dataDir + "/risk_predictions.csv");
 
                 if (mlLoaded)
                     cout << "ML risk predictions loaded successfully.\n";
@@ -546,7 +569,7 @@ int main()
                 break;
 
             case 5:
-                routeMenu(engine, datasetLoaded, mlLoaded);
+                routeMenu(engine, datasetLoaded, mlLoaded, dataDir);
                 break;
 
             case 6:

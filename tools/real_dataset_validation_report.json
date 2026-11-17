@@ -1,0 +1,350 @@
+{
+  "files_located": {
+    "DATA_SOURCES.txt": {
+      "exists": true,
+      "size_bytes": 990,
+      "path": "C:\\Users\\Harsh\\Desktop\\dynamic-disaster-risk-rescue-optimization\\data\\real\\DATA_SOURCES.txt"
+    },
+    "locations.csv": {
+      "exists": true,
+      "size_bytes": 59880,
+      "path": "C:\\Users\\Harsh\\Desktop\\dynamic-disaster-risk-rescue-optimization\\data\\real\\locations.csv"
+    },
+    "roads.csv": {
+      "exists": true,
+      "size_bytes": 145491,
+      "path": "C:\\Users\\Harsh\\Desktop\\dynamic-disaster-risk-rescue-optimization\\data\\real\\roads.csv"
+    },
+    "road_features.csv": {
+      "exists": true,
+      "size_bytes": 157041,
+      "path": "C:\\Users\\Harsh\\Desktop\\dynamic-disaster-risk-rescue-optimization\\data\\real\\road_features.csv"
+    },
+    "risk_predictions.csv": {
+      "exists": true,
+      "size_bytes": 99906,
+      "path": "C:\\Users\\Harsh\\Desktop\\dynamic-disaster-risk-rescue-optimization\\data\\real\\risk_predictions.csv"
+    },
+    "road_geometry.json": {
+      "exists": true,
+      "size_bytes": 1996530,
+      "path": "C:\\Users\\Harsh\\Desktop\\dynamic-disaster-risk-rescue-optimization\\data\\real\\road_geometry.json"
+    },
+    "emergencies.csv": {
+      "exists": true,
+      "size_bytes": 7197,
+      "path": "C:\\Users\\Harsh\\Desktop\\dynamic-disaster-risk-rescue-optimization\\data\\real\\emergencies.csv"
+    },
+    "resources.csv": {
+      "exists": true,
+      "size_bytes": 10438,
+      "path": "C:\\Users\\Harsh\\Desktop\\dynamic-disaster-risk-rescue-optimization\\data\\real\\resources.csv"
+    },
+    "model_report.json": {
+      "exists": true,
+      "size_bytes": 688,
+      "path": "C:\\Users\\Harsh\\Desktop\\dynamic-disaster-risk-rescue-optimization\\data\\real\\model_report.json"
+    }
+  },
+  "record_counts": {
+    "locations.csv": {
+      "expected": 1086,
+      "actual": 1086,
+      "matches": true
+    },
+    "roads.csv": {
+      "expected": 2362,
+      "actual": 2362,
+      "matches": true
+    },
+    "road_features.csv": {
+      "expected": 2362,
+      "actual": 2362,
+      "matches": true
+    },
+    "risk_predictions.csv": {
+      "expected": 2362,
+      "actual": 2362,
+      "matches": true
+    },
+    "road_geometry.json": {
+      "expected": 2362,
+      "actual": 2362,
+      "matches": true
+    },
+    "emergencies.csv": {
+      "expected": 150,
+      "actual": 150,
+      "matches": true
+    },
+    "resources.csv": {
+      "expected": 236,
+      "actual": 236,
+      "matches": true
+    }
+  },
+  "locations_validation": {
+    "columns_match": true,
+    "duplicate_ids": 0,
+    "null_counts": {
+      "id": 0,
+      "name": 0,
+      "type": 0,
+      "latitude": 0,
+      "longitude": 0,
+      "capacity": 0
+    },
+    "lat_range": [
+      29.90067,
+      30.487394
+    ],
+    "lon_range": [
+      77.950708,
+      78.347841
+    ],
+    "lat_in_bounds": true,
+    "lon_in_bounds": true,
+    "type_distribution": {
+      "JUNCTION": 934,
+      "HOSPITAL": 95,
+      "VILLAGE": 37,
+      "RESCUE_STATION": 13,
+      "SHELTER": 7
+    },
+    "capacity_range": [
+      0,
+      500
+    ]
+  },
+  "roads_validation": {
+    "columns_match": true,
+    "duplicate_ids": 0,
+    "null_counts": {
+      "id": 0,
+      "source": 0,
+      "destination": 0,
+      "distance": 0,
+      "travel_time": 0,
+      "risk": 0,
+      "traffic": 0,
+      "road_condition": 0,
+      "status": 0
+    },
+    "invalid_source_count": 0,
+    "invalid_destination_count": 0,
+    "self_loop_count": 0,
+    "distance_range": [
+      0.002,
+      61.58
+    ],
+    "travel_time_range": [
+      0.0,
+      123.16
+    ],
+    "risk_distribution": {
+      "Low": 945,
+      "Medium": 826,
+      "High": 425,
+      "Critical": 166
+    },
+    "traffic_distribution": {
+      "Low": 1261,
+      "Medium": 796,
+      "High": 305
+    },
+    "condition_distribution": {
+      "Fair": 1824,
+      "Good": 538
+    },
+    "status_distribution": {
+      "Open": 2362
+    },
+    "invalid_risk_count": 0,
+    "invalid_traffic_count": 0,
+    "invalid_condition_count": 0,
+    "invalid_status_count": 0
+  },
+  "network_topology": {
+    "total_nodes_in_file": 1086,
+    "connected_nodes": 1086,
+    "isolated_nodes": 0,
+    "isolated_node_ids": [],
+    "total_directed_edges": 2362,
+    "bidirectional_directed_edges": 1438,
+    "bidirectional_percentage": 61.37430644472898,
+    "average_node_degree": 4.349907918968692,
+    "max_node_degree": 8
+  },
+  "road_features_validation": {
+    "columns": [
+      "id",
+      "highway",
+      "slope_pct",
+      "elev_mean",
+      "rain_p95",
+      "soil_mean",
+      "landslides_5km",
+      "hazard_index",
+      "risk",
+      "ml_risk"
+    ],
+    "id_match_roads": true,
+    "mismatched_id_count": 0,
+    "hazard_index_range": [
+      0.1327,
+      0.9663
+    ],
+    "null_counts": {
+      "id": 0,
+      "highway": 0,
+      "slope_pct": 0,
+      "elev_mean": 0,
+      "rain_p95": 0,
+      "soil_mean": 0,
+      "landslides_5km": 0,
+      "hazard_index": 0,
+      "risk": 0,
+      "ml_risk": 0
+    },
+    "risk_distribution": {
+      "Low": 945,
+      "Medium": 826,
+      "High": 425,
+      "Critical": 166
+    },
+    "ml_risk_distribution": {
+      "Low": 947,
+      "Medium": 823,
+      "High": 427,
+      "Critical": 165
+    }
+  },
+  "risk_predictions_validation": {
+    "id_match_roads": true,
+    "mismatched_id_count": 0,
+    "source_dest_match": true,
+    "predicted_risk_distribution": {
+      "Low": 947,
+      "Medium": 823,
+      "High": 427,
+      "Critical": 165
+    },
+    "confidence_range": [
+      0.4963,
+      1.0
+    ],
+    "confidence_nulls": 0
+  },
+  "geometry_validation": {
+    "total_roads_in_geometry": 2362,
+    "id_match_roads": true,
+    "mismatched_id_count": 0,
+    "coordinate_ordering": "[latitude, longitude] (Leaflet native)",
+    "points_per_road": {
+      "min": 2,
+      "avg": 41.927603725656226,
+      "max": 3034
+    },
+    "lat_range": [
+      29.89827,
+      30.4883
+    ],
+    "lon_range": [
+      77.95061,
+      78.34784
+    ],
+    "out_of_bounds_points": 0,
+    "endpoint_accuracy_meters": {
+      "avg_start_offset_m": 0.4046982373744627,
+      "max_start_offset_m": 0.7357648721201305,
+      "avg_end_offset_m": 0.4036305372588476,
+      "max_end_offset_m": 0.7357648721201305
+    }
+  },
+  "emergencies_validation": {
+    "total_records": 150,
+    "valid_location_count": 150,
+    "invalid_location_count": 0,
+    "invalid_location_ids": [],
+    "severities": {
+      "MEDIUM": 48,
+      "LOW": 46,
+      "HIGH": 39,
+      "CRITICAL": 17
+    },
+    "people_affected_range": [
+      4,
+      398
+    ]
+  },
+  "resources_validation": {
+    "total_records": 236,
+    "valid_location_count": 236,
+    "invalid_location_count": 0,
+    "invalid_location_ids": [],
+    "types": {
+      "Medical": 190,
+      "Rescue": 39,
+      "Shelter": 7
+    },
+    "availability": {
+      "Available": 146,
+      "Unavailable": 48,
+      "Busy": 42
+    }
+  },
+  "ml_feature_compatibility": {
+    "model_report_features": [
+      "slope_pct",
+      "rain_p95",
+      "elev_mean",
+      "rain_heavy_days",
+      "elev_gain",
+      "landslide_dist_km",
+      "landslides_5km",
+      "rain_max",
+      "soil_mean",
+      "distance",
+      "sinuosity",
+      "class_rank",
+      "soil_max"
+    ],
+    "road_features_csv_columns": [
+      "id",
+      "highway",
+      "slope_pct",
+      "elev_mean",
+      "rain_p95",
+      "soil_mean",
+      "landslides_5km",
+      "hazard_index",
+      "risk",
+      "ml_risk"
+    ],
+    "features_missing_in_road_features_csv": [
+      "rain_heavy_days",
+      "elev_gain",
+      "landslide_dist_km",
+      "rain_max",
+      "distance",
+      "sinuosity",
+      "class_rank",
+      "soil_max"
+    ],
+    "model_metrics": {
+      "spatial_holdout_accuracy": 0.762,
+      "spatial_holdout_macro_f1": 0.7595,
+      "majority_class_baseline": 0.4463,
+      "train_roads": 1757,
+      "test_roads": 605
+    },
+    "model_risk_distribution": {
+      "Low": 945,
+      "Medium": 826,
+      "High": 425,
+      "Critical": 166
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
