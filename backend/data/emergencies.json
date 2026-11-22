@@ -8,8 +8,8 @@
     "locationId": "LOC_0010",
     "peopleAffected": 145,
     "reportedAt": "2026-11-05T07:15:00.000Z",
-    "updatedAt": "2026-11-05T07:15:00.000Z",
-    "status": "Reported"
+    "updatedAt": "2026-11-22T13:35:20.914Z",
+    "status": "Resolved"
   },
   {
     "emergencyId": "EMG-0002",
@@ -20,8 +20,8 @@
     "locationId": "LOC_0054",
     "peopleAffected": 88,
     "reportedAt": "2026-11-05T07:45:00.000Z",
-    "updatedAt": "2026-11-05T07:45:00.000Z",
-    "status": "Prioritized"
+    "updatedAt": "2026-11-22T13:34:05.148Z",
+    "status": "Resolved"
   },
   {
     "emergencyId": "EMG-0003",
@@ -32,8 +32,8 @@
     "locationId": "LOC_0085",
     "peopleAffected": 32,
     "reportedAt": "2026-11-05T08:10:00.000Z",
-    "updatedAt": "2026-11-05T08:10:00.000Z",
-    "status": "Responding"
+    "updatedAt": "2026-11-22T13:34:49.983Z",
+    "status": "Resolved"
   },
   {
     "emergencyId": "EMG-0004",
@@ -104,8 +104,8 @@
     "locationId": "LOC_0050",
     "peopleAffected": 99,
     "reportedAt": "2026-11-05T11:59:40.566Z",
-    "updatedAt": "2026-11-05T11:59:40.566Z",
-    "status": "Reported"
+    "updatedAt": "2026-11-22T13:31:29.211Z",
+    "status": "Resolved"
   },
   {
     "emergencyId": "EMG-0010",
@@ -116,8 +116,8 @@
     "locationId": "LOC_0045",
     "peopleAffected": 1000,
     "reportedAt": "2026-11-05T12:00:13.194Z",
-    "updatedAt": "2026-11-05T12:00:13.194Z",
-    "status": "Reported"
+    "updatedAt": "2026-11-22T13:35:27.445Z",
+    "status": "Resolved"
   },
   {
     "emergencyId": "EMG-0011",
